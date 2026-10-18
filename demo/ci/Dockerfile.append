@@ -1,0 +1,4 @@
+
+FROM twenty AS stuard-demo
+COPY --chown=1000:1000 --chmod=755 demo/deploy/entrypoint.sh /app/entrypoint.sh
+LABEL org.opencontainers.image.title="twenty-stuard-demo-product"

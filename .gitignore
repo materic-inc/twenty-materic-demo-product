@@ -70,3 +70,11 @@ screenshots/
 /.diag*.mjs
 /.compare*.mjs
 /.narrow*.mjs
+
+# Stuard demo runtime artifacts and short-lived cloud credentials.
+gha-creds-*.json
+.demo-ci-runtime/
+demo-smoke-artifacts/
+demo/ci/Dockerfile.generated
+demo/.local/
+demo-image.txt

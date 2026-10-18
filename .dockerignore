@@ -3,3 +3,8 @@
 **/node_modules
 .nx/cache
 packages/twenty-server/.env
+gha-creds-*.json
+.demo-ci-runtime/
+demo-smoke-artifacts/
+demo/.local/
+demo-image.txt

@@ -1,0 +1,71 @@
+# Demo hosting
+
+This is an independent Twenty deployment. It has no Stuard integration. Both application processes use the same immutable image. PostgreSQL, Redis and uploads survive application replacement.
+
+## GCP host
+
+Create a dedicated project under the Materic organization and link its existing billing account. `provision-gcp.sh` requires an explicit project ID and checks billing before creating resources; it does not change the default gcloud project or billing configuration.
+
+```sh
+GCP_PROJECT_ID=YOUR_SELECTED_PROJECT bash demo/deploy/provision-gcp.sh
+```
+
+The default VM is `twenty-stuard-demo-product` in `us-east1-b`, `e2-standard-2` (2 vCPU, 8 GB RAM), with a 20 GB boot disk, separate 50 GB persistent data disk and reserved IPv4 address. Docker data and deployment files live under `/srv/twenty` on the separate disk. A nightly disk snapshot schedule retains seven days and keeps snapshots if the original disk is deleted. Those disk snapshots are crash-consistent; the deployment wrapper also takes a consistent database and uploads backup with application writes stopped before each upgrade.
+
+Only HTTPS/HTTP are public. SSH is limited to Google's Identity-Aware Proxy, accessed with `gcloud compute ssh --tunnel-through-iap`. The VM has no attached service account, so the application cannot use project-wide cloud credentials. DNS must point the selected hostname to the reserved IPv4 address before HTTPS can complete.
+
+Install the root-owned `twenty-demo-deploy` wrapper at `/usr/local/sbin/twenty-demo-deploy` with mode `755`. Put runtime settings in `/etc/twenty-demo/.env` owned by root with mode `600`; inject the values from Infisical over IAP SSH, never through instance metadata. CI calls:
+
+```sh
+sudo /usr/local/sbin/twenty-demo-deploy \
+  ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:IMAGE_DIGEST \
+  FULL_GIT_COMMIT_SHA
+```
+
+The wrapper validates image/revision agreement, fetches only deployment files from that exact Git commit, stops application writes for backup, waits for server health after strict migrations, starts the worker and proxy, and verifies identical server/worker image digests. The current image and source revision are recorded in `/srv/twenty/current-image` and `/srv/twenty/current-revision`. Failed migrations stop deployment; they are not ignored. Backups remain private under `/srv/twenty/backups` and are included in disk snapshots. Monitor disk usage and copy important recovery points off-host before changing retention.
+
+## Single-host deployment
+
+Use a Linux host with Docker Compose, at least 4 GB RAM and a DNS hostname pointing to it. Only ports 80 and 443 need public ingress. The database and Redis have no published ports. Caddy obtains and renews HTTPS certificates automatically.
+
+Secrets belong to Infisical **Apps**, environment `dev`, path `/twenty-stuard-demo-product` (project `c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c`). `POSTGRES_PASSWORD` must be random hexadecimal so it can be embedded safely in the connection URL. Keep `APP_SECRET` and `ENCRYPTION_KEY` stable across releases. Generate each with `openssl rand -hex 32` and save directly to Infisical without displaying values.
+
+Set non-secret `TWENTY_HOST` and `SERVER_URL` for the actual hostname. Run from the repository root:
+
+```sh
+infisical run --projectId c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c \
+  --env dev --path /twenty-stuard-demo-product -- \
+  docker compose -f demo/deploy/compose.yaml up -d --wait --wait-timeout 900
+```
+
+Initial bootstrap uses the stable official `twentycrm/twenty:v2.48.0` image. CI-built fork images override `TWENTY_IMAGE`; the server and worker must always receive the same digest. Bring the server up first so database upgrades finish before the worker starts. Confirm `/healthz`, successful login, record lists and uploads after deployment.
+
+Email uses Twenty's logger driver; synthetic invitations and password recovery messages stay in logs. Do not add real recipients or provider credentials. Bootstrap the initial workspace before opening the deployment to users; signups should not be used to create unsolicited workspaces. Account credentials and API tokens must remain in Infisical.
+
+## Railway deployment
+
+The intended managed layout is five independent resources in one project:
+
+| Resource | Configuration |
+| --- | --- |
+| server | Pinned Twenty image; `railway-server.json`; public HTTPS domain |
+| worker | Same image digest; `railway-worker.json`; no public domain |
+| PostgreSQL | PostgreSQL 16; persistent volume |
+| Redis | Redis 7.4; persistent volume; append-only persistence and `noeviction` |
+| uploads | Railway S3-compatible bucket, used by both application processes |
+
+Both application services need `PG_DATABASE_URL`, `REDIS_URL`, `APP_SECRET`, `ENCRYPTION_KEY`, `SERVER_URL`, `NODE_ENV=production`, `STORAGE_TYPE=S_3`, `STORAGE_S3_REGION`, `STORAGE_S3_NAME`, `STORAGE_S3_ENDPOINT`, `STORAGE_S3_ACCESS_KEY_ID`, and `STORAGE_S3_SECRET_ACCESS_KEY`. Use Railway variable references for database, Redis and bucket credentials. Mirror generated credentials into the Infisical path above. The worker additionally needs `DISABLE_DB_MIGRATIONS=true` and `DISABLE_CRON_JOBS_REGISTRATION=true`. Apply the safety and email settings from the Compose environment to both.
+
+As of 2026-10-18, project creation is blocked by the authenticated Railway account: **“Your trial has expired. Please select a plan to continue using Railway.”** No Railway resources were provisioned. A plan must be activated before this deployment can run there.
+
+## Backups and releases
+
+Before changing application versions, create a database and uploads snapshot:
+
+```sh
+infisical run --projectId c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c \
+  --env dev --path /twenty-stuard-demo-product -- \
+  bash demo/deploy/backup.sh /var/backups/twenty
+```
+
+Copy backups to separate durable storage and test restoring into an isolated deployment. Database and upload archives are sequential snapshots; stop the worker and prevent writes for a consistent recovery point. Redis jobs are not a substitute for database or upload backups. A code rollback after a database migration can require restoring the matching database snapshot; do not deploy an older image blindly.

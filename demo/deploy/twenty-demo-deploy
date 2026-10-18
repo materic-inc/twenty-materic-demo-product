@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+
+[[ "$(id -u)" = 0 ]] || { echo "Run this deployment command with sudo." >&2; exit 1; }
+image="${1:?Pass the immutable GHCR image digest}"
+source_revision="${2:?Pass the matching 40-character Git revision}"
+[[ "$image" =~ ^ghcr\.io/materic-inc/twenty-stuard-demo-product@sha256:[a-f0-9]{64}$ ]] || { echo "Unexpected image reference." >&2; exit 1; }
+[[ "$source_revision" =~ ^[a-f0-9]{40}$ ]] || { echo "Unexpected source revision." >&2; exit 1; }
+
+exec 9>/run/lock/twenty-demo-deploy.lock
+flock -n 9 || { echo "Another Twenty deployment is running." >&2; exit 1; }
+deploy_directory=/srv/twenty/deploy
+secret_file=/etc/twenty-demo/.env
+[[ -s "$secret_file" ]] || { echo "Missing root-only deployment environment." >&2; exit 1; }
+[[ "$(stat -c %a "$secret_file")" = 600 ]] || { echo "Deployment environment must have mode 600." >&2; exit 1; }
+
+docker pull "$image"
+image_revision="$(docker image inspect "$image" --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
+[[ "$image_revision" = "$source_revision" ]] || { echo "Image revision does not match the requested source." >&2; exit 1; }
+
+staging_directory="$(mktemp -d)"
+trap 'rm -rf "$staging_directory"' EXIT
+for deploy_file in compose.yaml Caddyfile entrypoint.sh; do
+  curl --fail --silent --show-error --location \
+    "https://raw.githubusercontent.com/materic-inc/twenty-stuard-demo-product/$source_revision/demo/deploy/$deploy_file" \
+    --output "$staging_directory/$deploy_file"
+done
+
+compose=(docker compose --env-file "$secret_file" -f "$deploy_directory/compose.yaml")
+if [[ -s /srv/twenty/current-image ]]; then
+  TWENTY_IMAGE="$(cat /srv/twenty/current-image)"
+  export TWENTY_IMAGE
+  "${compose[@]}" stop worker server
+  timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+  mkdir -p /srv/twenty/backups
+  "${compose[@]}" exec -T postgres pg_dump -U twenty -d twenty --format=custom > "/srv/twenty/backups/twenty-$timestamp.dump"
+  "${compose[@]}" run --rm --no-deps -T --entrypoint tar server \
+    -czf - -C /app/packages/twenty-server/.local-storage . > "/srv/twenty/backups/uploads-$timestamp.tar.gz"
+fi
+
+mkdir -p "$deploy_directory"
+install -m 644 "$staging_directory/compose.yaml" "$staging_directory/Caddyfile" "$staging_directory/entrypoint.sh" "$deploy_directory/"
+export TWENTY_IMAGE="$image"
+"${compose[@]}" config --quiet
+"${compose[@]}" up -d --wait --wait-timeout 900 server
+"${compose[@]}" up -d --wait --wait-timeout 180 worker proxy
+
+for service in server worker; do
+  container_id="$("${compose[@]}" ps -q "$service")"
+  [[ -n "$container_id" ]] || { echo "$service is missing." >&2; exit 1; }
+  deployed_image="$(docker inspect "$container_id" --format '{{.Config.Image}}')"
+  [[ "$deployed_image" = "$image" ]] || { echo "$service has an unexpected image." >&2; exit 1; }
+  [[ "$(docker inspect "$container_id" --format '{{.State.Running}}')" = true ]] || { echo "$service is not running." >&2; exit 1; }
+done
+printf '%s\n' "$image" > /srv/twenty/current-image
+printf '%s\n' "$source_revision" > /srv/twenty/current-revision
+echo "Deployed source $source_revision to server and worker."

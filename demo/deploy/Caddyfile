@@ -1,0 +1,4 @@
+{$TWENTY_HOST} {
+	reverse_proxy server:3000
+	encode zstd gzip
+}
