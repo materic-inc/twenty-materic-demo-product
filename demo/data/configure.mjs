@@ -248,4 +248,35 @@ for (let index = 0; index < plans.length; index++) {
   console.log(`Configured view: ${plan.name}`);
 }
 
+// These boards include six currencies. Count deals in column headers instead
+// of adding incomparable monetary values; keep each deal's native amount field.
+const pipelineViews = await client.graphql(
+  'query DemoPipelineViews { getViews { id name type objectMetadataId kanbanAggregateOperation kanbanAggregateOperationFieldMetadataId } }',
+);
+for (const view of pipelineViews.getViews) {
+  if (
+    view.objectMetadataId !== metadata.opportunities.id ||
+    view.type !== 'KANBAN' ||
+    !['By Stage', 'Enterprise pipeline'].includes(view.name)
+  )
+    continue;
+  const countFieldId = metadata.opportunities.fields.id.id;
+  if (
+    view.kanbanAggregateOperation === 'COUNT' &&
+    view.kanbanAggregateOperationFieldMetadataId === countFieldId
+  )
+    continue;
+  await client.graphql(
+    'mutation DemoPipelineCount($id:String!,$input:UpdateViewInput!) { updateView(id:$id,input:$input) { id kanbanAggregateOperation kanbanAggregateOperationFieldMetadataId } }',
+    {
+      id: view.id,
+      input: {
+        kanbanAggregateOperation: 'COUNT',
+        kanbanAggregateOperationFieldMetadataId: countFieldId,
+      },
+    },
+  );
+  console.log(`Configured pipeline column counts: ${view.name}`);
+}
+
 await configureDashboards(client, metadata);
