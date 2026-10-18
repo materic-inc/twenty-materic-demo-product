@@ -169,6 +169,23 @@ assert.equal(staff.totalCount, 81, 'Expected exactly 80 staff plus the owner');
 report.counts.workspaceMembers = staff.totalCount;
 console.log(`Workspace members: ${staff.totalCount}`);
 const metadata = await listMetadata(client);
+const pipelineViews = await client.graphql(
+  'query DemoVerifyPipelineViews { getViews { id name objectMetadataId kanbanAggregateOperation kanbanAggregateOperationFieldMetadataId } }',
+);
+report.pipelineViews = ['By Stage', 'Enterprise pipeline'].map((name) => {
+  const view = pipelineViews.getViews.find(
+    (candidate) =>
+      candidate.name === name &&
+      candidate.objectMetadataId === metadata.opportunities.id,
+  );
+  assert.ok(view, `Missing pipeline view: ${name}`);
+  assert.equal(view.kanbanAggregateOperation, 'COUNT');
+  assert.equal(
+    view.kanbanAggregateOperationFieldMetadataId,
+    metadata.opportunities.fields.id.id,
+  );
+  return { id: view.id, name, aggregate: view.kanbanAggregateOperation };
+});
 const plans = buildDashboardPlans(metadata);
 for (let dashboardIndex = 0; dashboardIndex < plans.length; dashboardIndex++) {
   const dashboard = await find(
