@@ -7,7 +7,10 @@ snapshot_name="${1:?Pass a permanent baseline snapshot name after import and QA 
 ssh=(gcloud compute ssh twenty-stuard-demo-product --project twenty-stuard-demo-product --zone us-east1-b --tunnel-through-iap --quiet)
 
 resume_script='set -euo pipefail
-if [ -s /srv/twenty/current-image ]; then export TWENTY_IMAGE="$(cat /srv/twenty/current-image)"; fi
+if sudo test -s /srv/twenty/current-image; then
+  TWENTY_IMAGE="$(sudo cat /srv/twenty/current-image)"
+  export TWENTY_IMAGE
+fi
 sudo --preserve-env=TWENTY_IMAGE docker compose --progress quiet --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml up -d --wait --wait-timeout 900 server
 sudo --preserve-env=TWENTY_IMAGE docker compose --progress quiet --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml up -d --wait --wait-timeout 180 worker proxy'
 resume_application() {
@@ -17,7 +20,10 @@ trap resume_application EXIT
 
 backup_script="$(cat <<'SCRIPT'
 set -euo pipefail
-if [ -s /srv/twenty/current-image ]; then export TWENTY_IMAGE="$(cat /srv/twenty/current-image)"; fi
+if sudo test -s /srv/twenty/current-image; then
+  TWENTY_IMAGE="$(sudo cat /srv/twenty/current-image)"
+  export TWENTY_IMAGE
+fi
 compose() { sudo --preserve-env=TWENTY_IMAGE docker compose --progress quiet --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml "$@"; }
 compose stop worker server
 sudo install -d -m 700 /srv/twenty/backups/BASELINE_NAME
@@ -28,7 +34,7 @@ FROM core.workspace WHERE "activationStatus" IN ('ACTIVE', 'CREATED') AND "delet
 SQL
 compose exec -T postgres pg_dump -U twenty -d twenty --format=custom | sudo tee /srv/twenty/backups/BASELINE_NAME/database.dump >/dev/null
 compose run --rm --no-deps -T --entrypoint tar server -czf - -C /app/packages/twenty-server/.local-storage . | sudo tee /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz >/dev/null
-sudo chmod 600 /srv/twenty/backups/BASELINE_NAME/*
+sudo chmod 600 /srv/twenty/backups/BASELINE_NAME/counts.ndjson /srv/twenty/backups/BASELINE_NAME/database.dump /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz
 sudo cat /srv/twenty/backups/BASELINE_NAME/database.dump | compose exec -T postgres pg_restore --list >/dev/null
 sudo sha256sum /srv/twenty/backups/BASELINE_NAME/database.dump /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz
 sync
