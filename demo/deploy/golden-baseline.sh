@@ -35,7 +35,9 @@ SQL
 compose exec -T postgres pg_dump -U twenty -d twenty --format=custom | sudo tee /srv/twenty/backups/BASELINE_NAME/database.dump >/dev/null
 compose run --rm --no-deps -T --entrypoint tar server -czf - -C /app/packages/twenty-server/.local-storage . | sudo tee /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz >/dev/null
 sudo chmod 600 /srv/twenty/backups/BASELINE_NAME/counts.ndjson /srv/twenty/backups/BASELINE_NAME/database.dump /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz
-sudo cat /srv/twenty/backups/BASELINE_NAME/database.dump | compose exec -T postgres pg_restore --list >/dev/null
+sudo docker cp /srv/twenty/backups/BASELINE_NAME/database.dump twenty-stuard-demo-product-postgres-1:/tmp/twenty-demo-baseline-check.dump
+compose exec -T postgres pg_restore --list /tmp/twenty-demo-baseline-check.dump >/dev/null
+compose exec -T postgres rm -f /tmp/twenty-demo-baseline-check.dump
 sudo sha256sum /srv/twenty/backups/BASELINE_NAME/database.dump /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz
 sync
 SCRIPT
