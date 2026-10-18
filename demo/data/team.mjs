@@ -6,6 +6,7 @@ import { parseArgs } from 'node:util';
 import { createClient } from './client.mjs';
 import { teamDirectory } from './dataset.mjs';
 import { persistDemoSecrets } from './secrets.mjs';
+import { isolationFromEnvironment, assertIsolatedScriptState } from './isolation.mjs';
 
 const { values } = parseArgs({
   options: {
@@ -17,6 +18,10 @@ const { values } = parseArgs({
     },
   },
 });
+const isolation = isolationFromEnvironment();
+await assertIsolatedScriptState(isolation, values['state-dir']);
+if (isolation && resolve(values['owner-state'] || '') !== join(isolation.stateDirectory, 'bootstrap-secrets.json'))
+  throw new Error('Isolated team setup requires the owner state from this exact run');
 const {
   TWENTY_BASE_URL: baseUrl,
   TWENTY_API_KEY: token,
@@ -50,9 +55,16 @@ if (values['owner-state']) {
   );
   if (ownerState.TWENTY_WORKSPACE_ID !== workspaceId)
     throw new Error('Owner session belongs to another workspace');
+  if (isolation && ownerState.target !== isolation.targetOrigin)
+    throw new Error('Owner session belongs to another isolated target');
   administrativeToken = ownerState.TWENTY_OWNER_ACCESS_TOKEN;
 }
 const client = createClient({ baseUrl, token: administrativeToken });
+if (isolation) {
+  const current = await client.graphql('query DemoOwnerWorkspace { currentWorkspace { id } }');
+  if (current.currentWorkspace.id !== workspaceId)
+    throw new Error('Authenticated owner session belongs to another isolated workspace');
+}
 const invitationStatePath = join(directory, 'invitation-state.json');
 const restoreInvite = (originalState) =>
   client.graphql(
@@ -79,6 +91,8 @@ try {
 const original = await client.graphql(
   'query DemoInviteState { currentWorkspace { id inviteHash isPublicInviteLinkEnabled } }',
 );
+if (isolation && original.currentWorkspace.id !== workspaceId)
+  throw new Error('Authenticated owner session belongs to another isolated workspace');
 const inviteHash = randomBytes(24).toString('hex');
 const persist = () =>
   writeFile(file, JSON.stringify(state, null, 2), { mode: 0o600 });
@@ -153,6 +167,11 @@ try {
       auth.getAuthTokensFromLoginToken.tokens.accessOrWorkspaceAgnosticToken
         .token;
     const ownClient = createClient({ baseUrl, token: accessToken });
+    if (isolation) {
+      const current = await ownClient.graphql('query DemoTeamWorkspace { currentWorkspace { id } }');
+      if (current.currentWorkspace.id !== workspaceId)
+        throw new Error('Authenticated Member session belongs to another isolated workspace');
+    }
     const response = await ownClient.request(
       `/rest/workspaceMembers?filter=${encodeURIComponent(`userEmail[eq]:${record.email}`)}&depth=0`,
     );
@@ -215,7 +234,7 @@ if (
 await persistDemoSecrets({
   DEMO_SMOKE_EMAIL: smokeMember.email,
   DEMO_SMOKE_PASSWORD: smokeMember.password,
-});
+}, isolation);
 console.log(
   'Persisted DEMO_SMOKE_EMAIL and DEMO_SMOKE_PASSWORD to the scoped Infisical dev path.',
 );

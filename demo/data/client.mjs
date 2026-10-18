@@ -1,25 +1,39 @@
 import { setTimeout as delay } from 'node:timers/promises';
+import { isolationFromEnvironment, assertIsolationRequest } from './isolation.mjs';
 
 export function createClient({ baseUrl, token, delayMilliseconds = 700 }) {
+  const isolation = isolationFromEnvironment();
   const origin = new URL(process.env.TWENTY_TRANSPORT_URL || baseUrl);
   if (!['https:', 'http:'].includes(origin.protocol))
     throw new Error('Twenty base/transport URL must be an HTTP URL');
+  if (isolation) assertIsolationRequest(isolation, origin);
   let previousRequest = 0;
   async function request(path, { method = 'GET', body, bearer = token } = {}) {
+    const url = new URL(path, origin);
+    if (isolation) {
+      if (process.env.TWENTY_TRANSPORT_URL !== undefined) throw new Error('Unset TWENTY_TRANSPORT_URL for isolation');
+      assertIsolationRequest(isolation, url);
+    }
     for (let attempt = 0; attempt < 7; attempt++) {
       await delay(
         Math.max(0, previousRequest + delayMilliseconds - Date.now()),
       );
       previousRequest = Date.now();
-      const response = await fetch(new URL(path, origin), {
+      const response = await fetch(url, {
         method,
+        ...(isolation ? { redirect: 'error' } : {}),
         headers: {
           'content-type': 'application/json',
           ...(bearer ? { authorization: `Bearer ${bearer}` } : {}),
         },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
         signal: AbortSignal.timeout(120000),
+      }).catch((error) => {
+        if (isolation) throw new Error('Isolated API transport failed; no redirect is permitted');
+        throw error;
       });
+      if (isolation && response.status >= 300 && response.status < 400)
+        throw new Error('Isolated API redirect rejected');
       if (response.status === 429 || response.status >= 500) {
         if (attempt === 6)
           throw new Error(
@@ -35,6 +49,7 @@ export function createClient({ baseUrl, token, delayMilliseconds = 700 }) {
       }
       const payload = await response.json().catch(() => null);
       if (!response.ok || payload?.errors?.length) {
+        if (isolation) throw new Error(`Isolated API returned HTTP ${response.status} or GraphQL errors; response diagnostics withheld`);
         const messages =
           payload?.errors
             ?.map((error) =>
