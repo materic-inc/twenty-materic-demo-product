@@ -32,7 +32,21 @@ if ! command -v docker >/dev/null 2>&1; then
   DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 fi
 
-systemctl stop docker.service docker.socket
+systemctl stop docker.service docker.socket containerd.service
+mkdir -p /srv/twenty/containerd
+if [[ ! -e /srv/twenty/containerd/.migrated ]]; then
+  if [[ -d /var/lib/containerd ]]; then
+    cp -a /var/lib/containerd/. /srv/twenty/containerd/
+  fi
+  touch /srv/twenty/containerd/.migrated
+fi
+containerd_configuration="$(mktemp)"
+sed '/^[[:space:]]*root[[:space:]]*=/d' /etc/containerd/config.toml > "$containerd_configuration"
+{
+  echo 'root = "/srv/twenty/containerd"'
+  cat "$containerd_configuration"
+} > /etc/containerd/config.toml
+unlink "$containerd_configuration"
 mkdir -p /etc/docker
 cat > /etc/docker/daemon.json <<'JSON'
 {"data-root":"/srv/twenty/docker","log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"3"}}
@@ -42,7 +56,9 @@ cat > /etc/systemd/system/docker.service.d/twenty-storage.conf <<'UNIT'
 [Unit]
 RequiresMountsFor=/srv/twenty
 UNIT
+mkdir -p /etc/systemd/system/containerd.service.d
+cp /etc/systemd/system/docker.service.d/twenty-storage.conf /etc/systemd/system/containerd.service.d/twenty-storage.conf
 systemctl daemon-reload
 systemctl enable docker.service
-systemctl start docker.service
+systemctl start containerd.service docker.service
 echo "Twenty host ready. Docker data and deployment files persist on the separate twenty-data disk."

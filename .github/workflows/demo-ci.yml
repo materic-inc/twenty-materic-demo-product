@@ -28,6 +28,7 @@ jobs:
           while IFS= read -r -d '' file; do node --check "$file"; done < <(find demo -name '*.mjs' -not -path '*/node_modules/*' -print0)
           while IFS= read -r -d '' file; do bash -n "$file"; done < <(find demo -name '*.sh' -print0)
           bash demo/ci/entrypoint.test.sh
+          bash demo/ci/gcp-deploy.test.sh
           if compgen -G 'demo/data/*.test.mjs' > /dev/null; then node --test demo/data/*.test.mjs; fi
           git diff --check
       - name: Validate portable deployment
@@ -110,6 +111,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -131,6 +133,8 @@ jobs:
           GCP_ZONE: ${{ vars.GCP_ZONE }}
           GCP_INSTANCE_NAME: ${{ vars.GCP_INSTANCE_NAME }}
           DEMO_SOURCE_SHA: ${{ github.sha }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USERNAME: ${{ github.actor }}
         run: bash demo/ci/gcp-deploy.sh
       - name: Install isolated browser smoke tools
         run: |

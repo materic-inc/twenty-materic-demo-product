@@ -122,4 +122,56 @@ test('full fixture has substantial breadth and unique companies', () => {
     new Set(full.opportunities.map((row) => row.amount.currencyCode)).size,
     6,
   );
+  const recentThreshold = new Date(
+    Date.parse(DEFAULT_AS_OF) - 14 * 86400000,
+  ).toISOString();
+  const recentCompanies = full.companies.filter(
+    (company) => company.createdAt >= recentThreshold,
+  );
+  assert.equal(recentCompanies.length, 750);
+  const peopleById = new Map(full.people.map((person) => [person.id, person]));
+  const companiesById = new Map(
+    full.companies.map((company) => [company.id, company]),
+  );
+  for (const person of full.people)
+    assert.ok(
+      person.createdAt >= companiesById.get(person.companyId).createdAt,
+    );
+  for (const opportunity of full.opportunities) {
+    assert.ok(
+      opportunity.createdAt >=
+        companiesById.get(opportunity.companyId).createdAt,
+    );
+    assert.ok(
+      opportunity.createdAt >=
+        peopleById.get(opportunity.pointOfContactId).createdAt,
+    );
+    if (companiesById.get(opportunity.companyId).createdAt >= recentThreshold)
+      assert.ok(['NEW', 'SCREENING'].includes(opportunity.stage));
+  }
+  const opportunitiesById = new Map(
+    full.opportunities.map((opportunity) => [opportunity.id, opportunity]),
+  );
+  for (const kind of ['task', 'note']) {
+    const recordsById = new Map(
+      full[`${kind}s`].map((record) => [record.id, record]),
+    );
+    for (const target of full[`${kind}Targets`]) {
+      const record = recordsById.get(target[`${kind}Id`]);
+      if (target.targetCompanyId)
+        assert.ok(
+          record.createdAt >=
+            companiesById.get(target.targetCompanyId).createdAt,
+        );
+      if (target.targetPersonId)
+        assert.ok(
+          record.createdAt >= peopleById.get(target.targetPersonId).createdAt,
+        );
+      if (target.targetOpportunityId)
+        assert.ok(
+          record.createdAt >=
+            opportunitiesById.get(target.targetOpportunityId).createdAt,
+        );
+    }
+  }
 });

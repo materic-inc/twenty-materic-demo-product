@@ -63,3 +63,17 @@ infisical run --projectId c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c \
 ```
 
 Copy backups to separate durable storage and test restoring into an isolated deployment. Database and upload archives are sequential snapshots; stop the worker and prevent writes for a consistent recovery point. Redis jobs are not a substitute for database or upload backups. A code rollback after a database migration can require restoring the matching database snapshot; do not deploy an older image blindly.
+
+## Golden baseline
+
+Only after synthetic import and product QA finish, run `bash demo/deploy/golden-baseline.sh twenty-demo-baseline-YYYYMMDD`. This stops application writes, creates a checked PostgreSQL dump and matching uploads archive, creates a named manual GCP snapshot while writes remain stopped, then restarts the application. The manual snapshot is separate from the rolling seven-day policy and has no scheduled expiration. Record the snapshot name, image digest and Git revision with the seed manifest.
+
+For recovery, create a separate disk from that snapshot instead of replacing the live disk:
+
+```sh
+gcloud compute disks create twenty-demo-baseline-restore \
+  --source-snapshot=YOUR_BASELINE_SNAPSHOT --zone=us-east1-b \
+  --project=twenty-stuard-demo-product
+```
+
+Attach it to an isolated recovery VM and mount it at a recovery path. Inspect the saved `current-image`, `current-revision` and `backups/` files before starting an isolated Compose stack with the matching image. Inject the original encryption and app secrets from Infisical. The custom database dump restores with `pg_restore` into an empty PostgreSQL16 database; extract the matching uploads archive into its uploads volume. Verify login, record counts, relationships and file access there before any deliberate live reset. Never point a recovery stack at the live database or Redis.

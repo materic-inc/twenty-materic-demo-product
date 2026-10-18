@@ -62,8 +62,8 @@ sudo install -m 600 {shlex.quote(remote_directory)}/runtime.env /etc/twenty-demo
 sudo tar -xf {shlex.quote(remote_directory)}/deploy.tar -C /srv/twenty/deploy
 sudo install -m 755 /srv/twenty/deploy/twenty-demo-deploy /usr/local/sbin/twenty-demo-deploy
 rm -rf {shlex.quote(remote_directory)}
-sudo docker compose --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml up -d --wait --wait-timeout 900 server
-sudo docker compose --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml up -d --wait --wait-timeout 180 worker
+sudo docker compose --progress quiet --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml up -d --wait --wait-timeout 900 server
+sudo docker compose --progress quiet --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml up -d --wait --wait-timeout 180 worker
 curl --fail --silent http://127.0.0.1:3000/healthz
 """
         subprocess.run([*ssh, "--command", command], check=True)

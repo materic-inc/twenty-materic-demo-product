@@ -1,9 +1,9 @@
 import { setTimeout as delay } from 'node:timers/promises';
 
 export function createClient({ baseUrl, token, delayMilliseconds = 700 }) {
-  const origin = new URL(baseUrl);
+  const origin = new URL(process.env.TWENTY_TRANSPORT_URL || baseUrl);
   if (!['https:', 'http:'].includes(origin.protocol))
-    throw new Error('TWENTY_BASE_URL must be an HTTP URL');
+    throw new Error('Twenty base/transport URL must be an HTTP URL');
   let previousRequest = 0;
   async function request(path, { method = 'GET', body, bearer = token } = {}) {
     for (let attempt = 0; attempt < 7; attempt++) {

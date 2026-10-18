@@ -239,7 +239,10 @@ export function buildDataset({
     ][Math.floor(index / (PREFIXES.length * VERTICALS.length)) % 5];
     const name = `${PREFIXES[index % PREFIXES.length]} ${vertical[0]}${regionSuffix}`;
     const domain = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.example`;
-    const created = start + Math.floor(random() * 480) * DAY;
+    const created =
+      index % 20 < 3
+        ? now - (1 + Math.floor(random() * 14)) * DAY
+        : start + Math.floor(random() * 480) * DAY;
     const employees = pick(
       [18, 32, 48, 75, 120, 180, 250, 450, 800, 1200, 2400, 5000],
       random,
@@ -299,10 +302,12 @@ export function buildDataset({
     const companyIndex = index % counts.companies;
     const context = companyContexts[companyIndex];
     const name = personName(index + 83);
-    const created = Math.min(
-      now - DAY,
-      context.created + Math.floor(random() * 45) * DAY,
+    const contactWindowDays = Math.min(
+      45,
+      Math.floor((now - DAY - context.created) / DAY) + 1,
     );
+    const created =
+      context.created + Math.floor(random() * contactWindowDays) * DAY;
     datasets.people.push({
       id: idFor('person', index),
       name,
@@ -334,15 +339,24 @@ export function buildDataset({
       (Math.floor(index / counts.companies) %
         Math.floor(counts.people / counts.companies)) *
         counts.companies;
-    const created = Math.min(
-      now - 5 * DAY,
-      context.created + (7 + Math.floor(random() * 100)) * DAY,
+    const earliestOpportunity = Date.parse(
+      datasets.people[contactIndex].createdAt,
     );
+    const opportunityWindowDays = Math.min(
+      108,
+      Math.floor((now - DAY - earliestOpportunity) / DAY) + 1,
+    );
+    const created =
+      earliestOpportunity + Math.floor(random() * opportunityWindowDays) * DAY;
     const ageDays = (now - created) / DAY;
     const stage =
-      ageDays > 120 && random() < 0.68
-        ? 'CUSTOMER'
-        : pick(STAGES.slice(0, 4), random);
+      ageDays < 21
+        ? random() < 0.65
+          ? 'NEW'
+          : 'SCREENING'
+        : ageDays > 120 && random() < 0.68
+          ? 'CUSTOMER'
+          : pick(STAGES.slice(0, 4), random);
     const closeDate =
       stage === 'CUSTOMER'
         ? Math.min(now - DAY, created + (30 + Math.floor(random() * 90)) * DAY)

@@ -23,7 +23,7 @@ The full dataset contains 214,000 persisted records, excluding staff, three dash
 
 ## Run
 
-Requires Node.js 22+ with no additional dependencies. First deploy Twenty. `bootstrap.mjs` creates the owner and workspace through the normal auth APIs, activates the standard application, completes owner profile and email-sync onboarding, and creates an Admin-scoped seed API key. It signs in to the existing owner/workspace when rerun. Disable external email delivery and keep `IS_EMAIL_VERIFICATION_REQUIRED=false` for reserved demo identities. Provision these values in Infisical **dev**, under `/twenty-stuard-demo-product`, and inject them at runtime:
+Requires Node.js 22+ without npm dependencies. Bootstrap also requires the authenticated Infisical CLI. First deploy Twenty. `bootstrap.mjs` creates the owner and workspace through the normal auth APIs, activates the standard application, completes owner profile and email-sync onboarding, and creates an Admin-scoped seed API key. It signs in to the existing owner/workspace when rerun. Disable external email delivery and keep `IS_EMAIL_VERIFICATION_REQUIRED=false` for reserved demo identities. Provision these values in Infisical **dev**, under `/twenty-stuard-demo-product`, and inject them at runtime:
 
 - `TWENTY_BASE_URL`: deployed Twenty origin.
 - `TWENTY_OWNER_PASSWORD`: owner password stored in Infisical before bootstrap. Owner email defaults to `alex.morgan@meridian-cloud.example`; `TWENTY_OWNER_EMAIL` can override it.
@@ -38,7 +38,7 @@ node demo/data/seed.mjs --profile full
 node --test demo/data/dataset.test.mjs
 ```
 
-Bootstrap with `TWENTY_BASE_URL` and `TWENTY_OWNER_PASSWORD` injected, then immediately persist the generated `TWENTY_API_KEY` and `TWENTY_WORKSPACE_ID` from the owner-only `bootstrap-secrets.json` file to the same Infisical dev path. Do not print its contents. For an IAP/SSH loopback tunnel, set `TWENTY_AUTH_ORIGIN` to Twenty's configured public origin while `TWENTY_BASE_URL` points at the tunnel.
+Bootstrap with `TWENTY_BASE_URL` and `TWENTY_OWNER_PASSWORD` injected. The script immediately stores `TWENTY_API_KEY`, `TWENTY_WORKSPACE_ID` and the canonical public `TWENTY_BASE_URL` in the pinned Infisical Apps dev path. CLI output is captured, and its temporary owner-only dotenv file is deleted afterward. The private `bootstrap-secrets.json` file retains recovery data; do not print its contents. For an IAP/SSH loopback tunnel, set `TWENTY_AUTH_ORIGIN` to Twenty's configured public origin while `TWENTY_BASE_URL` points at the tunnel.
 
 ```sh
 node demo/data/bootstrap.mjs
@@ -52,12 +52,14 @@ node demo/data/configure.mjs
 node demo/data/seed.mjs --profile smoke --apply
 node demo/data/verify.mjs --profile smoke --samples 4
 node demo/data/seed.mjs --profile full --apply
-node demo/data/verify.mjs --profile full
+node demo/data/verify.mjs --profile full --report demo/evidence/data-verification-full.json
 ```
 
 `team.mjs` creates real login accounts through Twenty's signup API, completes profile and email-sync onboarding, and preserves a private credential directory. It temporarily enables a random workspace invitation link, then restores the original invitation state in `finally`. It records invitation state privately before enabling the link and recovers it on the next run after a process crash. Existing staff accounts sign in with their recorded password before resuming incomplete onboarding. Members use the workspace's default role; the owner retains administration. It never prints passwords, invitation hashes or tokens.
 
 The default private state directory is `~/.local/share/twenty-stuard-demo-product`, created with owner-only permissions. Keep it outside Git. Use `--state-dir /absolute/private/path` to choose another destination. Staff passwords remain reproducible from the Infisical seed; retain the original seed rather than rotating it casually.
+
+For private imports before opening ingress, keep `TWENTY_BASE_URL` set to the canonical public origin and set `TWENTY_TRANSPORT_URL=http://127.0.0.1:13007` for the IAP tunnel. Requests use the tunnel while checkpoints, credentials and authentication remain pinned to the canonical product. Remove the transport override for subsequent public verification.
 
 `seed.mjs` uses `/rest/batch/{object}?upsert=true` in dependency order. It checks workspace identity from the credential and stops if expected fields or members are missing. Company and opportunity owners cycle through seeded staff. `TWENTY_MEMBER_IDS` can override owner IDs as a comma-separated list.
 

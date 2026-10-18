@@ -62,6 +62,7 @@ services:
 
   server:
     <<: *application
+    command: [node, dist/main]
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:

@@ -5,11 +5,34 @@ umask 077
 [[ "$(id -u)" = 0 ]] || { echo "Run this deployment command with sudo." >&2; exit 1; }
 image="${1:?Pass the immutable GHCR image digest}"
 source_revision="${2:?Pass the matching 40-character Git revision}"
+registry_username="${3:-}"
 [[ "$image" =~ ^ghcr\.io/materic-inc/twenty-stuard-demo-product@sha256:[a-f0-9]{64}$ ]] || { echo "Unexpected image reference." >&2; exit 1; }
 [[ "$source_revision" =~ ^[a-f0-9]{40}$ ]] || { echo "Unexpected source revision." >&2; exit 1; }
 
 exec 9>/run/lock/twenty-demo-deploy.lock
 flock -n 9 || { echo "Another Twenty deployment is running." >&2; exit 1; }
+staging_directory=""
+registry_directory=""
+cleanup() {
+  [[ -z "$staging_directory" ]] || rm -rf "$staging_directory"
+  [[ -z "$registry_directory" ]] || rm -rf "$registry_directory"
+}
+trap cleanup EXIT
+
+if [[ -n "$registry_username" ]]; then
+  [[ "$registry_username" =~ ^[A-Za-z0-9_-]+(\[bot\])?$ ]] || { echo "Unexpected registry username." >&2; exit 1; }
+  IFS= read -r registry_token
+  [[ -n "$registry_token" ]] || { echo "Missing ephemeral registry token on stdin." >&2; exit 1; }
+  registry_directory="$(mktemp -d /run/twenty-demo-registry.XXXXXX)"
+  export DOCKER_CONFIG="$registry_directory"
+  if ! printf '%s' "$registry_token" | docker login ghcr.io --username "$registry_username" --password-stdin >/dev/null 2>&1; then
+    unset registry_token
+    echo "Ephemeral registry authentication failed." >&2
+    exit 1
+  fi
+  unset registry_token
+fi
+
 deploy_directory=/srv/twenty/deploy
 secret_file=/etc/twenty-demo/.env
 [[ -s "$secret_file" ]] || { echo "Missing root-only deployment environment." >&2; exit 1; }
@@ -20,7 +43,6 @@ image_revision="$(docker image inspect "$image" --format '{{ index .Config.Label
 [[ "$image_revision" = "$source_revision" ]] || { echo "Image revision does not match the requested source." >&2; exit 1; }
 
 staging_directory="$(mktemp -d)"
-trap 'rm -rf "$staging_directory"' EXIT
 for deploy_file in compose.yaml Caddyfile entrypoint.sh; do
   curl --fail --silent --show-error --location \
     "https://raw.githubusercontent.com/materic-inc/twenty-stuard-demo-product/$source_revision/demo/deploy/$deploy_file" \
