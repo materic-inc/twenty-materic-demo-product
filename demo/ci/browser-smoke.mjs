@@ -22,11 +22,11 @@ try {
   assert.equal(response.status(), 200);
   await page.getByRole('button', { name: /continue with email|sign in/i }).first().waitFor({ state: 'visible', timeout: 60_000 });
   if (process.env.DEMO_SMOKE_EMAIL && process.env.DEMO_SMOKE_PASSWORD) {
-    if (!(await page.locator('input[type="email"]').isVisible())) {
+    if (!(await page.getByPlaceholder('Email', { exact: true }).isVisible())) {
       await page.getByRole('button', { name: /continue with email/i }).first().click();
     }
-    await page.locator('input[type="email"]').fill(process.env.DEMO_SMOKE_EMAIL);
-    await page.getByRole('button', { name: /continue with email|sign in/i }).first().click();
+    await page.getByPlaceholder('Email', { exact: true }).fill(process.env.DEMO_SMOKE_EMAIL);
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
     await page.locator('input[type="password"]').fill(process.env.DEMO_SMOKE_PASSWORD);
     await page.getByRole('button', { name: /sign in/i }).first().click();
     await page.getByText('Companies', { exact: true }).first().waitFor({ state: 'visible', timeout: 60_000 });
