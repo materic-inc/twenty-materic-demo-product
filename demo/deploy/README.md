@@ -12,7 +12,9 @@ GCP_PROJECT_ID=YOUR_SELECTED_PROJECT bash demo/deploy/provision-gcp.sh
 
 The default VM is `twenty-stuard-demo-product` in `us-east1-b`, `e2-standard-2` (2 vCPU, 8 GB RAM), with a 20 GB boot disk, separate 50 GB persistent data disk and reserved IPv4 address. Docker data and deployment files live under `/srv/twenty` on the separate disk. A nightly disk snapshot schedule retains seven days and keeps snapshots if the original disk is deleted. Those disk snapshots are crash-consistent; the deployment wrapper also takes a consistent database and uploads backup with application writes stopped before each upgrade.
 
-Only HTTPS/HTTP are public. SSH is limited to Google's Identity-Aware Proxy, accessed with `gcloud compute ssh --tunnel-through-iap`. The VM has no attached service account, so the application cannot use project-wide cloud credentials. DNS must point the selected hostname to the reserved IPv4 address before HTTPS can complete.
+Web ingress starts disabled to prevent an outsider claiming the first workspace. SSH is limited to Google's Identity-Aware Proxy, accessed with `gcloud compute ssh --tunnel-through-iap`. Use an IAP SSH tunnel to the server's loopback port 3000 to bootstrap the owner. After the owner exists and the synthetic seed is verified, enable the dedicated `twenty-stuard-demo-product-web` firewall rule. The VM has no attached service account, so the application cannot use project-wide cloud credentials. DNS must point the selected hostname to the reserved IPv4 address before HTTPS can complete.
+
+During the private synthetic seed only, `API_RATE_LIMITING_LONG_LIMIT=500` permits 500 requests per minute. Restore `100` and recreate the application processes before enabling public ingress. This changes neither the API key scope nor authentication requirements.
 
 Install the root-owned `twenty-demo-deploy` wrapper at `/usr/local/sbin/twenty-demo-deploy` with mode `755`. Put runtime settings in `/etc/twenty-demo/.env` owned by root with mode `600`; inject the values from Infisical over IAP SSH, never through instance metadata. CI calls:
 
@@ -41,22 +43,6 @@ infisical run --projectId c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c \
 Initial bootstrap uses the stable official `twentycrm/twenty:v2.48.0` image. CI-built fork images override `TWENTY_IMAGE`; the server and worker must always receive the same digest. Bring the server up first so database upgrades finish before the worker starts. Confirm `/healthz`, successful login, record lists and uploads after deployment.
 
 Email uses Twenty's logger driver; synthetic invitations and password recovery messages stay in logs. Do not add real recipients or provider credentials. Bootstrap the initial workspace before opening the deployment to users; signups should not be used to create unsolicited workspaces. Account credentials and API tokens must remain in Infisical.
-
-## Railway deployment
-
-The intended managed layout is five independent resources in one project:
-
-| Resource | Configuration |
-| --- | --- |
-| server | Pinned Twenty image; `railway-server.json`; public HTTPS domain |
-| worker | Same image digest; `railway-worker.json`; no public domain |
-| PostgreSQL | PostgreSQL 16; persistent volume |
-| Redis | Redis 7.4; persistent volume; append-only persistence and `noeviction` |
-| uploads | Railway S3-compatible bucket, used by both application processes |
-
-Both application services need `PG_DATABASE_URL`, `REDIS_URL`, `APP_SECRET`, `ENCRYPTION_KEY`, `SERVER_URL`, `NODE_ENV=production`, `STORAGE_TYPE=S_3`, `STORAGE_S3_REGION`, `STORAGE_S3_NAME`, `STORAGE_S3_ENDPOINT`, `STORAGE_S3_ACCESS_KEY_ID`, and `STORAGE_S3_SECRET_ACCESS_KEY`. Use Railway variable references for database, Redis and bucket credentials. Mirror generated credentials into the Infisical path above. The worker additionally needs `DISABLE_DB_MIGRATIONS=true` and `DISABLE_CRON_JOBS_REGISTRATION=true`. Apply the safety and email settings from the Compose environment to both.
-
-As of 2026-10-18, project creation is blocked by the authenticated Railway account: **“Your trial has expired. Please select a plan to continue using Railway.”** No Railway resources were provisioned. A plan must be activated before this deployment can run there.
 
 ## Backups and releases
 

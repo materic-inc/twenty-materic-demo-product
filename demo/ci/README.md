@@ -33,9 +33,9 @@ The built-in `/healthz` endpoint is a liveness check, not a full database/Redis 
 
 ## Moving upstream
 
-`demo-upstream-sync.yml` fetches Twenty's `main` every day at 10:17 UTC and opens or refreshes a PR from `automation/upstream-main` into `codex/demo-product`. It never merges into deployment automatically and never resets or seeds the database. Conflicts fail visibly instead of replacing demo changes. Review migrations before merging. To stage smaller or historical batches, open additional reviewed branches from selected upstream commits.
+`demo-upstream-sync.yml` fetches Twenty's `main` every day at 10:17 UTC and refreshes `automation/upstream-main` with a merge into the current demo branch. It runs a validation-only image build and puts a compare/create-PR link in the Actions summary. Materic's organization policy prevents Actions from creating pull requests, so a human creates or updates the review PR using that link. A PR already open from that branch receives the new commits automatically. No personal access token or organization policy change is needed.
 
-GitHub's repository Actions settings must allow Actions to create pull requests. A workflow is explicitly dispatched on the proposal branch because PRs made with `GITHUB_TOKEN` do not trigger `pull_request` workflows. Those validation builds cannot publish images or access deployment secrets.
+The workflow never merges into deployment automatically and never resets or seeds the database. Conflicts fail visibly instead of replacing demo changes. Review migrations before merging. To stage smaller or historical batches, open additional reviewed branches from selected upstream commits. The explicitly dispatched proposal build cannot publish images or access deployment secrets.
 
 Run locally:
 

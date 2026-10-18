@@ -21,19 +21,19 @@ if ! git merge --no-edit "$upstream_sha"; then
   exit 1
 fi
 git push --force-with-lease origin "HEAD:refs/heads/$update_branch"
-body_file=$(mktemp)
-trap 'rm -f "$body_file"' EXIT
-cat > "$body_file" <<BODY
-Merge Twenty upstream main at $upstream_sha into the demo deployment branch.
-
-The deployment remains unchanged until this PR is reviewed and merged. Check schema migration requirements and take a database snapshot before merging. This workflow never resets or reseeds the database. A successful build alone does not prove a database upgrade is safe.
-
-The build workflow is dispatched explicitly because PRs created with GITHUB_TOKEN do not trigger pull_request workflows. Any merge conflicts stop this workflow and require a reviewed local resolution.
-BODY
-existing_pr=$(gh pr list --head "$update_branch" --base "$base_branch" --state open --json number --jq '.[0].number // empty')
-if [[ -n "$existing_pr" ]]; then
-  gh pr edit "$existing_pr" --body-file "$body_file"
-else
-  gh pr create --head "$update_branch" --base "$base_branch" --title 'chore: bring current Twenty upstream into demo' --body-file "$body_file"
+compare_url="https://github.com/$GH_REPO/compare/codex%2Fdemo-product...automation%2Fupstream-main?expand=1"
+echo "Review upstream changes: $compare_url"
+if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+  {
+    echo '### Upstream review branch updated'
+    echo
+    echo "Twenty main: \`$upstream_sha\`"
+    echo
+    echo "[Review changes and create a pull request]($compare_url)"
+    echo
+    echo 'Organization policy prevents GitHub Actions from creating pull requests. The proposal branch is validated by CI; review and create its PR through this link. The deployment branch and database are unchanged.'
+    echo
+    echo 'Review schema migrations before merging. Take a database snapshot and follow Twenty upgrade requirements; a successful build does not prove a database upgrade is safe.'
+  } >> "$GITHUB_STEP_SUMMARY"
 fi
 gh workflow run demo-ci.yml --ref "$update_branch"

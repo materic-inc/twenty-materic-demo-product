@@ -28,8 +28,15 @@ for deploy_file in compose.yaml Caddyfile entrypoint.sh; do
 done
 
 compose=(docker compose --env-file "$secret_file" -f "$deploy_directory/compose.yaml")
-if [[ -s /srv/twenty/current-image ]]; then
-  TWENTY_IMAGE="$(cat /srv/twenty/current-image)"
+if [[ -f "$deploy_directory/compose.yaml" ]] && [[ -n "$("${compose[@]}" ps -q postgres)" ]]; then
+  server_container="$("${compose[@]}" ps -a -q server)"
+  if [[ -n "$server_container" ]]; then
+    TWENTY_IMAGE="$(docker inspect "$server_container" --format '{{.Config.Image}}')"
+  elif [[ -s /srv/twenty/current-image ]]; then
+    TWENTY_IMAGE="$(cat /srv/twenty/current-image)"
+  else
+    TWENTY_IMAGE=twentycrm/twenty:v2.48.0
+  fi
   export TWENTY_IMAGE
   "${compose[@]}" stop worker server
   timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
