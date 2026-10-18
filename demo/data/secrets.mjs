@@ -2,8 +2,13 @@ import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
+import { isolationFromEnvironment, validateIsolation, assertIsolatedScriptState } from './isolation.mjs';
 
-export async function persistDemoSecrets(secrets) {
+export async function persistDemoSecrets(secrets, isolation = isolationFromEnvironment(), { store = spawnSync } = {}) {
+  if (isolation) {
+    isolation = validateIsolation({ ...isolation, databaseUrl: isolation.databaseEndpoint, cacheUrl: isolation.cacheEndpoint });
+    await assertIsolatedScriptState(isolation, isolation.stateDirectory);
+  }
   const temporaryDirectory = await mkdtemp(join(tmpdir(), 'twenty-secrets-'));
   try {
     const environmentPath = join(temporaryDirectory, 'secrets.env');
@@ -14,17 +19,17 @@ export async function persistDemoSecrets(secrets) {
         .join('\n') + '\n',
       { mode: 0o600 },
     );
-    const stored = spawnSync(
+    const stored = store(
       'infisical',
       [
         'secrets',
         'set',
         '--projectId',
-        'c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c',
+        isolation?.projectId || 'c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c',
         '--env',
-        'dev',
+        isolation?.environment || 'dev',
         '--path',
-        '/twenty-stuard-demo-product',
+        isolation?.secretPath || '/twenty-stuard-demo-product',
         '--file',
         environmentPath,
         '--silent',

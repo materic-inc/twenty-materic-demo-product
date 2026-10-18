@@ -4,6 +4,7 @@ import { homedir } from 'node:os';
 import { parseArgs } from 'node:util';
 import { createClient } from './client.mjs';
 import { persistDemoSecrets } from './secrets.mjs';
+import { isolationFromEnvironment, assertIsolatedScriptState } from './isolation.mjs';
 
 const { values } = parseArgs({
   options: {
@@ -13,6 +14,8 @@ const { values } = parseArgs({
     },
   },
 });
+const isolation = isolationFromEnvironment();
+await assertIsolatedScriptState(isolation, values['state-dir']);
 const { TWENTY_BASE_URL: baseUrl, TWENTY_OWNER_PASSWORD: password } =
   process.env;
 const email =
@@ -53,6 +56,8 @@ const session = await client.graphql(
 const authentication = session[operation];
 const existing =
   authentication.availableWorkspaces.availableWorkspacesForSignIn;
+if (isolation && saved?.TWENTY_WORKSPACE_ID && !existing.some((candidate) => candidate.id === saved.TWENTY_WORKSPACE_ID))
+  throw new Error('Saved isolated workspace is not available to this owner; refusing name-based recovery');
 let workspace =
   existing.find((candidate) => candidate.id === saved?.TWENTY_WORKSPACE_ID) ||
   existing.find((candidate) => candidate.displayName === workspaceName);
@@ -89,6 +94,8 @@ const ownerClient = createClient({ baseUrl, token: ownerToken });
 const initial = await ownerClient.graphql(
   'query DemoWorkspaceState { currentWorkspace { id displayName activationStatus } }',
 );
+if (isolation && initial.currentWorkspace.id !== workspace.id)
+  throw new Error('Authenticated owner session belongs to another isolated workspace');
 if (
   !['ACTIVE', 'CREATED'].includes(initial.currentWorkspace.activationStatus)
 ) {
@@ -181,11 +188,11 @@ await writeFile(
 await persistDemoSecrets({
   TWENTY_API_KEY: generated.generateApiKeyToken.token,
   TWENTY_WORKSPACE_ID: workspace.id,
-  TWENTY_BASE_URL: 'https://twenty-stuard-demo-product.materic.inc',
-});
+  TWENTY_BASE_URL: isolation?.targetOrigin || 'https://twenty-stuard-demo-product.materic.inc',
+}, isolation);
 console.log(
   `Workspace ready: ${workspaceName} (${workspace.id}). Owner: ${email}.`,
 );
 console.log(
-  `API credential saved privately at ${secretsPath}. Persisted TWENTY_API_KEY, TWENTY_WORKSPACE_ID and canonical TWENTY_BASE_URL to Infisical Apps dev /twenty-stuard-demo-product.`,
+  `API credential saved privately at ${secretsPath}. Persisted TWENTY_API_KEY, TWENTY_WORKSPACE_ID and canonical TWENTY_BASE_URL to ${isolation ? `the explicit isolated Infisical ${isolation.environment} ${isolation.secretPath} scope` : 'Infisical Apps dev /twenty-stuard-demo-product'}.`,
 );
