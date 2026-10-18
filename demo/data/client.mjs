@@ -43,6 +43,7 @@ export function createClient({ baseUrl, token, delayMilliseconds = 700 }) {
             .filter(Boolean)
             .join('; ') ||
           payload?.message ||
+          payload?.messages?.join('; ') ||
           'Request failed';
         // GraphQL variables can contain passwords; only report server diagnostics.
         throw new Error(

@@ -21,8 +21,11 @@ Install the root-owned `twenty-demo-deploy` wrapper at `/usr/local/sbin/twenty-d
 ```sh
 sudo /usr/local/sbin/twenty-demo-deploy \
   ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:IMAGE_DIGEST \
-  FULL_GIT_COMMIT_SHA
+  FULL_GIT_COMMIT_SHA \
+  GITHUB_ACTOR
 ```
+
+CI sends its temporary, read-only package token through the SSH connection's standard input. The wrapper logs into the private GHCR package using a root-only temporary Docker configuration under `/run` and removes it on exit. The token is never an argument or a persistent VM credential. Use the pipeline for routine releases; the two-argument wrapper form only works when the image is already available without registry authentication.
 
 The wrapper validates image/revision agreement, fetches only deployment files from that exact Git commit, stops application writes for backup, waits for server health after strict migrations, starts the worker and proxy, and verifies identical server/worker image digests. The current image and source revision are recorded in `/srv/twenty/current-image` and `/srv/twenty/current-revision`. Failed migrations stop deployment; they are not ignored. Backups remain private under `/srv/twenty/backups` and are included in disk snapshots. Monitor disk usage and copy important recovery points off-host before changing retention.
 
@@ -66,12 +69,12 @@ Copy backups to separate durable storage and test restoring into an isolated dep
 
 ## Golden baseline
 
-Only after synthetic import and product QA finish, run `bash demo/deploy/golden-baseline.sh twenty-demo-baseline-YYYYMMDD`. This stops application writes, creates a checked PostgreSQL dump and matching uploads archive, creates a named manual GCP snapshot while writes remain stopped, then restarts the application. The manual snapshot is separate from the rolling seven-day policy and has no scheduled expiration. Record the snapshot name, image digest and Git revision with the seed manifest.
+Only after synthetic import and product QA finish, run `bash demo/deploy/golden-baseline.sh twenty-stuard-demo-baseline-YYYYMMDD`. This stops application writes, creates a checked PostgreSQL dump and matching uploads archive, creates a named manual GCP snapshot while writes remain stopped, then restarts the application. The manual snapshot is separate from the rolling seven-day policy and has no scheduled expiration. Record the snapshot name, image digest and Git revision with the seed manifest.
 
 For recovery, create a separate disk from that snapshot instead of replacing the live disk:
 
 ```sh
-gcloud compute disks create twenty-demo-baseline-restore \
+gcloud compute disks create twenty-stuard-demo-baseline-restore \
   --source-snapshot=YOUR_BASELINE_SNAPSHOT --zone=us-east1-b \
   --project=twenty-stuard-demo-product
 ```

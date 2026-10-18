@@ -10,6 +10,7 @@ import { persistDemoSecrets } from './secrets.mjs';
 const { values } = parseArgs({
   options: {
     count: { type: 'string', default: '80' },
+    'owner-state': { type: 'string' },
     'state-dir': {
       type: 'string',
       default: join(homedir(), '.local', 'share', 'twenty-stuard-demo-product'),
@@ -42,7 +43,16 @@ try {
 }
 if (state.target !== baseUrl || state.workspaceId !== workspaceId)
   throw new Error('Credential state belongs to another target');
-const client = createClient({ baseUrl, token });
+let administrativeToken = token;
+if (values['owner-state']) {
+  const ownerState = JSON.parse(
+    await readFile(resolve(values['owner-state']), 'utf8'),
+  );
+  if (ownerState.TWENTY_WORKSPACE_ID !== workspaceId)
+    throw new Error('Owner session belongs to another workspace');
+  administrativeToken = ownerState.TWENTY_OWNER_ACCESS_TOKEN;
+}
+const client = createClient({ baseUrl, token: administrativeToken });
 const invitationStatePath = join(directory, 'invitation-state.json');
 const restoreInvite = (originalState) =>
   client.graphql(
@@ -165,6 +175,13 @@ try {
     await ownClient.graphql(
       'mutation DemoTeamOnboarding { skipSyncEmailOnboardingStep { success } }',
     );
+    const onboarding = await ownClient.graphql(
+      'query DemoStaffOnboarding { currentUser { onboardingStatus } }',
+    );
+    if (onboarding.currentUser.onboardingStatus !== 'COMPLETED')
+      throw new Error(
+        `Staff onboarding incomplete at index ${record.index}: ${onboarding.currentUser.onboardingStatus}`,
+      );
     record.workspaceMemberId = member.id;
     record.completed = true;
     await persist();
@@ -180,6 +197,21 @@ console.log(
   `Staff credentials derived from the Infisical seed and saved privately at ${file}; do not commit this file.`,
 );
 const smokeMember = state.members.find((member) => member.completed);
+const roleAudit = await client.graphql(
+  'query DemoSmokeRole { currentUser { workspaceMembers { id roles { label canUpdateAllSettings } } } }',
+);
+const smokeRoles = roleAudit.currentUser.workspaceMembers.find(
+  (member) => member.id === smokeMember.workspaceMemberId,
+)?.roles;
+if (
+  !smokeRoles?.some((role) => role.label.toLowerCase() === 'member') ||
+  smokeRoles.some(
+    (role) => role.canUpdateAllSettings || role.label.toLowerCase() === 'admin',
+  )
+)
+  throw new Error(
+    'Smoke account must have the non-admin Member role before publishing credentials',
+  );
 await persistDemoSecrets({
   DEMO_SMOKE_EMAIL: smokeMember.email,
   DEMO_SMOKE_PASSWORD: smokeMember.password,

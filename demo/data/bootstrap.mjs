@@ -22,6 +22,10 @@ if (!baseUrl || !password)
   throw new Error(
     'TWENTY_BASE_URL and Infisical-injected TWENTY_OWNER_PASSWORD are required',
   );
+if (password.length < 8 || password.length > 50)
+  throw new Error(
+    'TWENTY_OWNER_PASSWORD must contain 8..50 characters, matching Twenty v2.48',
+  );
 const authOrigin = process.env.TWENTY_AUTH_ORIGIN || new URL(baseUrl).origin;
 const directory = resolve(values['state-dir']);
 await mkdir(directory, { recursive: true, mode: 0o700 });
@@ -113,6 +117,17 @@ await ownerClient.graphql(
 await ownerClient.graphql(
   'mutation DemoSkipEmail { skipSyncEmailOnboardingStep { success } }',
 );
+// Empty invitations are Twenty's native Skip action and send no messages.
+await ownerClient.graphql(
+  'mutation DemoSkipInvitations { sendInvitations(emails:[]) { success } }',
+);
+const onboarding = await ownerClient.graphql(
+  'query DemoOwnerOnboarding { currentUser { onboardingStatus } }',
+);
+if (onboarding.currentUser.onboardingStatus !== 'COMPLETED')
+  throw new Error(
+    `Owner onboarding incomplete: ${onboarding.currentUser.onboardingStatus}`,
+  );
 const roles = await ownerClient.graphql(
   'query DemoKeyRoles { getApiKeyRoles { id label } }',
 );

@@ -47,7 +47,7 @@ node demo/data/bootstrap.mjs
 With the complete scoped Infisical environment injected:
 
 ```sh
-node demo/data/team.mjs
+node demo/data/team.mjs --owner-state ~/.local/share/twenty-stuard-demo-product/bootstrap-private/bootstrap-secrets.json
 node demo/data/configure.mjs
 node demo/data/seed.mjs --profile smoke --apply
 node demo/data/verify.mjs --profile smoke --samples 4
@@ -56,6 +56,8 @@ node demo/data/verify.mjs --profile full --report demo/evidence/data-verificatio
 ```
 
 `team.mjs` creates real login accounts through Twenty's signup API, completes profile and email-sync onboarding, and preserves a private credential directory. It temporarily enables a random workspace invitation link, then restores the original invitation state in `finally`. It records invitation state privately before enabling the link and recovers it on the next run after a process crash. Existing staff accounts sign in with their recorded password before resuming incomplete onboarding. Members use the workspace's default role; the owner retains administration. It never prints passwords, invitation hashes or tokens.
+
+Invitation administration requires a user-bound owner session in Twenty v2.48, supplied with `--owner-state`. If that ephemeral session expires, rerun bootstrap with the same private state directory, then rerun team provisioning; recorded invitation state and completed accounts are recovered. Team provisioning verifies the smoke account's non-admin Member role before storing `DEMO_SMOKE_EMAIL` and `DEMO_SMOKE_PASSWORD` in the scoped Infisical dev path. `audit-team.mjs --owner-state /private/bootstrap-secrets.json` independently verifies all 80 staff have Member access and only the owner is Admin.
 
 The default private state directory is `~/.local/share/twenty-stuard-demo-product`, created with owner-only permissions. Keep it outside Git. Use `--state-dir /absolute/private/path` to choose another destination. Staff passwords remain reproducible from the Infisical seed; retain the original seed rather than rotating it casually.
 

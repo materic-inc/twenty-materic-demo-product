@@ -1,3 +1,5 @@
+> Materic's `twenty-stuard-demo-product` fork: [demo deployment, data and delivery guide](demo/README.md).
+
 <p align="center">
   <a href="https://www.twenty.com">
     <img src="./packages/twenty-website/public/images/core/logo.svg" width="100px" alt="Twenty logo" />

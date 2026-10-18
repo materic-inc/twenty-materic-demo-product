@@ -3,8 +3,10 @@ name: Demo build and deploy
 on:
   push:
     branches: [codex/demo-product]
+    paths-ignore: ['**/*.md', 'demo/evidence/**']
   pull_request:
     branches: [codex/demo-product]
+    paths-ignore: ['**/*.md', 'demo/evidence/**']
   workflow_dispatch:
 
 permissions:
