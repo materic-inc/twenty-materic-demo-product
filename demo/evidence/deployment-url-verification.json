@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-10-18T22:06:13Z",
+  "deploymentId": 7161259930,
+  "deploymentStatusId": 19996260588,
+  "environment": "demo",
+  "environmentUrl": "https://twenty-stuard-demo-product.materic.inc",
+  "state": "success",
+  "verifiedRunningSource": "d98f3b43239b06dd440adb4d0d3d1800a2b2b54b",
+  "verifiedRunningImage": "ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:141002e22c407db106aea6ebaddd909f272290c0184e8675f077cbbf2dfa2df1",
+  "serverAndWorkerRunningSameImage": true,
+  "publicHealthHttpStatus": 200,
+  "workflowFutureDeploymentUrlConfigured": true,
+  "applicationRebuiltForMetadataChange": false,
+  "stuardRegistrationPerformed": false,
+  "isolatedMutationEnvironmentVerified": false
+}

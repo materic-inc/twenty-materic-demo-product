@@ -109,7 +109,9 @@ jobs:
     if: github.ref == 'refs/heads/codex/demo-product' && github.event_name != 'pull_request' && vars.DEMO_AUTO_DEPLOY == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 50
-    environment: demo
+    environment:
+      name: demo
+      url: https://twenty-stuard-demo-product.materic.inc
     permissions:
       contents: read
       id-token: write
