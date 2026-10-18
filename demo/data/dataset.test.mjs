@@ -158,9 +158,19 @@ test('full fixture has substantial breadth and unique companies', () => {
   );
   assert.equal(recentCompanies.length, 750);
   const peopleById = new Map(full.people.map((person) => [person.id, person]));
-  const namesByCompany = new Map(full.companies.map((company)=>[company.id,new Set()]));
-  for(const person of full.people) namesByCompany.get(person.companyId).add(`${person.name.firstName} ${person.name.lastName}`);
-  for(const names of namesByCompany.values()) assert.equal(names.size,5,'Each company needs five distinct contact names');
+  const namesByCompany = new Map(
+    full.companies.map((company) => [company.id, new Set()]),
+  );
+  for (const person of full.people)
+    namesByCompany
+      .get(person.companyId)
+      .add(`${person.name.firstName} ${person.name.lastName}`);
+  for (const names of namesByCompany.values())
+    assert.equal(
+      names.size,
+      5,
+      'Each company needs five distinct contact names',
+    );
   const companiesById = new Map(
     full.companies.map((company) => [company.id, company]),
   );

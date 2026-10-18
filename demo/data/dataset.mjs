@@ -352,7 +352,9 @@ export function buildDataset({
     const random = randomFor('person', index);
     const companyIndex = index % counts.companies;
     const context = companyContexts[companyIndex];
-    const name = personName(index + 83 + Math.floor(index / counts.companies) * 17);
+    const name = personName(
+      index + 83 + Math.floor(index / counts.companies) * 17,
+    );
     const contactWindowDays = Math.min(
       45,
       Math.floor((now - DAY - context.created) / DAY) + 1,

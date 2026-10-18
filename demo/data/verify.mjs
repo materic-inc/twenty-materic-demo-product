@@ -19,7 +19,11 @@ const { values } = parseArgs({
 const { TWENTY_BASE_URL: baseUrl, TWENTY_API_KEY: token } = process.env;
 if (!baseUrl || !token)
   throw new Error('TWENTY_BASE_URL and TWENTY_API_KEY are required');
-const client = createClient({ baseUrl, token, delayMilliseconds:Number(values['delay-ms']) });
+const client = createClient({
+  baseUrl,
+  token,
+  delayMilliseconds: Number(values['delay-ms']),
+});
 const staff = await client.request('/rest/workspaceMembers?limit=100&depth=0');
 const membersById = new Map(
   staff.data.workspaceMembers.map((member) => [member.id, member]),
@@ -112,11 +116,23 @@ for (let sample = 0; sample < Number(values.samples); sample++) {
   assertAuthor(company, company);
   assertAuthor(person, company);
   assertAuthor(opportunity, company);
-  const companyContacts = await client.request(`/rest/people?filter=${encodeURIComponent(`companyId[eq]:${company.id}`)}&limit=100&depth=0`);
-  assert.equal(companyContacts.totalCount,5);
-  const names=companyContacts.data.people.map((contact)=>`${contact.name.firstName} ${contact.name.lastName}`);
-  assert.equal(new Set(names).size,5,`${company.name}: contacts must have distinct names`);
-  report.contactNameSamples.push({companyId:company.id,companyName:company.name,names});
+  const companyContacts = await client.request(
+    `/rest/people?filter=${encodeURIComponent(`companyId[eq]:${company.id}`)}&limit=100&depth=0`,
+  );
+  assert.equal(companyContacts.totalCount, 5);
+  const names = companyContacts.data.people.map(
+    (contact) => `${contact.name.firstName} ${contact.name.lastName}`,
+  );
+  assert.equal(
+    new Set(names).size,
+    5,
+    `${company.name}: contacts must have distinct names`,
+  );
+  report.contactNameSamples.push({
+    companyId: company.id,
+    companyName: company.name,
+    names,
+  });
   assert.equal(person.companyId, company.id);
   assert.ok(person.emails.primaryEmail.endsWith('.example'));
   assert.ok(Number(opportunity.amount.amountMicros) > 0);
