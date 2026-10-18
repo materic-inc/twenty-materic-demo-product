@@ -27,6 +27,7 @@ jobs:
         run: |
           while IFS= read -r -d '' file; do node --check "$file"; done < <(find demo -name '*.mjs' -not -path '*/node_modules/*' -print0)
           while IFS= read -r -d '' file; do bash -n "$file"; done < <(find demo -name '*.sh' -print0)
+          bash demo/ci/entrypoint.test.sh
           if compgen -G 'demo/data/*.test.mjs' > /dev/null; then node --test demo/data/*.test.mjs; fi
           git diff --check
       - name: Validate portable deployment
