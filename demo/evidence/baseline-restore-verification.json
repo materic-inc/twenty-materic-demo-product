@@ -1,0 +1,23 @@
+{
+  "baseline": "twenty-stuard-demo-baseline-20261018",
+  "temporaryDatabase": "twenty_stuard_demo_restore_7c67b4476c9647a5",
+  "expected": [
+    {
+      "schema": "workspace_5hia3w6g1x25fuy4in2v4lcch",
+      "companies": 5000,
+      "people": 25000,
+      "opportunities": 8000
+    }
+  ],
+  "restored": [
+    {
+      "schema": "workspace_5hia3w6g1x25fuy4in2v4lcch",
+      "companies": 5000,
+      "people": 25000,
+      "opportunities": 8000
+    }
+  ],
+  "countsMatch": true,
+  "temporaryDatabaseDropped": true,
+  "verifiedAt": "2026-10-18T21:44:05.194325+00:00"
+}

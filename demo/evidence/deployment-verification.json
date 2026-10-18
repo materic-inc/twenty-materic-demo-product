@@ -1,0 +1,259 @@
+{
+  "verifiedAt": "2026-10-18T21:54:17.300300+00:00",
+  "project": "twenty-stuard-demo-product",
+  "hostname": "twenty-stuard-demo-product.materic.inc",
+  "host": {
+    "services": {
+      "server": {
+        "image": "ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:141002e22c407db106aea6ebaddd909f272290c0184e8675f077cbbf2dfa2df1",
+        "running": true,
+        "health": "healthy",
+        "restarts": 0,
+        "ports": {
+          "3000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "3000"
+            }
+          ]
+        },
+        "apiRateLimit": "100",
+        "disableDatabaseMigrations": null,
+        "disableCronRegistration": null
+      },
+      "worker": {
+        "image": "ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:141002e22c407db106aea6ebaddd909f272290c0184e8675f077cbbf2dfa2df1",
+        "running": true,
+        "health": null,
+        "restarts": 0,
+        "ports": {},
+        "apiRateLimit": "100",
+        "disableDatabaseMigrations": "true",
+        "disableCronRegistration": "true"
+      },
+      "postgres": {
+        "image": "postgres:16",
+        "running": true,
+        "health": "healthy",
+        "restarts": 0,
+        "ports": {
+          "5432/tcp": null
+        },
+        "apiRateLimit": null,
+        "disableDatabaseMigrations": null,
+        "disableCronRegistration": null
+      },
+      "redis": {
+        "image": "redis:7.4-alpine",
+        "running": true,
+        "health": "healthy",
+        "restarts": 0,
+        "ports": {
+          "6379/tcp": null
+        },
+        "apiRateLimit": null,
+        "disableDatabaseMigrations": null,
+        "disableCronRegistration": null
+      },
+      "proxy": {
+        "image": "caddy:2-alpine",
+        "running": true,
+        "health": null,
+        "restarts": 0,
+        "ports": {
+          "2019/tcp": null,
+          "443/tcp": [
+            {
+              "HostIp": "0.0.0.0",
+              "HostPort": "443"
+            },
+            {
+              "HostIp": "::",
+              "HostPort": "443"
+            }
+          ],
+          "443/udp": null,
+          "80/tcp": [
+            {
+              "HostIp": "0.0.0.0",
+              "HostPort": "80"
+            },
+            {
+              "HostIp": "::",
+              "HostPort": "80"
+            }
+          ]
+        },
+        "apiRateLimit": null,
+        "disableDatabaseMigrations": null,
+        "disableCronRegistration": null
+      }
+    },
+    "dockerRoot": "/srv/twenty/docker",
+    "containerdRoot": "/srv/twenty/containerd",
+    "dataMount": {
+      "filesystems": [
+        {
+          "source": "/dev/sdb",
+          "target": "/srv/twenty",
+          "fstype": "ext4",
+          "size": "48.9G",
+          "avail": "43.2G"
+        }
+      ]
+    },
+    "dockerRequiresMountsFor": "/srv/twenty",
+    "containerdRequiresMountsFor": "/srv/twenty",
+    "currentImage": "ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:141002e22c407db106aea6ebaddd909f272290c0184e8675f077cbbf2dfa2df1",
+    "currentRevision": "d98f3b43239b06dd440adb4d0d3d1800a2b2b54b",
+    "imageRevision": "d98f3b43239b06dd440adb4d0d3d1800a2b2b54b",
+    "environmentFileMode": "0o600",
+    "environmentFileOwnerUid": 0,
+    "ephemeralRegistryDirectoryCount": 0,
+    "durableRootRegistryConfigExists": false
+  },
+  "instance": {
+    "disks": [
+      {
+        "architecture": "X86_64",
+        "autoDelete": true,
+        "boot": true,
+        "deviceName": "persistent-disk-0",
+        "diskSizeGb": "20",
+        "guestOsFeatures": [
+          {
+            "type": "UEFI_COMPATIBLE"
+          },
+          {
+            "type": "VIRTIO_SCSI_MULTIQUEUE"
+          },
+          {
+            "type": "GVNIC"
+          },
+          {
+            "type": "SEV_CAPABLE"
+          },
+          {
+            "type": "SEV_LIVE_MIGRATABLE_V2"
+          },
+          {
+            "type": "SUSPEND_SAFE_FPR"
+          }
+        ],
+        "index": 0,
+        "interface": "SCSI",
+        "kind": "compute#attachedDisk",
+        "licenses": [
+          "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/licenses/debian-12-bookworm"
+        ],
+        "mode": "READ_WRITE",
+        "source": "https://www.googleapis.com/compute/v1/projects/twenty-stuard-demo-product/zones/us-east1-b/disks/twenty-stuard-demo-product",
+        "type": "PERSISTENT"
+      },
+      {
+        "autoDelete": false,
+        "boot": false,
+        "deviceName": "twenty-data",
+        "diskSizeGb": "50",
+        "index": 1,
+        "interface": "SCSI",
+        "kind": "compute#attachedDisk",
+        "mode": "READ_WRITE",
+        "source": "https://www.googleapis.com/compute/v1/projects/twenty-stuard-demo-product/zones/us-east1-b/disks/twenty-stuard-demo-product-data",
+        "type": "PERSISTENT"
+      }
+    ],
+    "machineType": "https://www.googleapis.com/compute/v1/projects/twenty-stuard-demo-product/zones/us-east1-b/machineTypes/e2-standard-2",
+    "name": "twenty-stuard-demo-product",
+    "networkInterfaces": [
+      {
+        "accessConfigs": [
+          {
+            "kind": "compute#accessConfig",
+            "name": "external-nat",
+            "natIP": "35.231.91.217",
+            "networkTier": "PREMIUM",
+            "type": "ONE_TO_ONE_NAT"
+          }
+        ],
+        "fingerprint": "nqbdpTsKpX0=",
+        "kind": "compute#networkInterface",
+        "name": "nic0",
+        "network": "https://www.googleapis.com/compute/v1/projects/twenty-stuard-demo-product/global/networks/twenty-stuard-demo-product",
+        "networkIP": "10.84.0.2",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/twenty-stuard-demo-product/regions/us-east1/subnetworks/twenty-stuard-demo-product"
+      }
+    ],
+    "status": "RUNNING"
+  },
+  "webFirewall": {
+    "allowed": [
+      {
+        "IPProtocol": "tcp",
+        "ports": [
+          "80"
+        ]
+      },
+      {
+        "IPProtocol": "tcp",
+        "ports": [
+          "443"
+        ]
+      }
+    ],
+    "disabled": false,
+    "name": "twenty-stuard-demo-product-web",
+    "sourceRanges": [
+      "0.0.0.0/0"
+    ],
+    "targetTags": [
+      "twenty-stuard-demo-product"
+    ]
+  },
+  "baselineSnapshot": {
+    "creationTimestamp": "2026-10-18T14:41:02.976-07:00",
+    "diskSizeGb": "50",
+    "labels": {
+      "application": "twenty-stuard-demo-product",
+      "purpose": "golden-baseline"
+    },
+    "name": "twenty-stuard-demo-baseline-20261018",
+    "sourceDisk": "https://www.googleapis.com/compute/v1/projects/twenty-stuard-demo-product/zones/us-east1-b/disks/twenty-stuard-demo-product-data",
+    "status": "READY",
+    "storageLocations": [
+      "us-east1"
+    ]
+  },
+  "publicHealth": {
+    "httpStatus": 200,
+    "body": {
+      "status": "ok",
+      "info": {},
+      "error": {},
+      "details": {}
+    }
+  },
+  "tls": {
+    "valid": true,
+    "version": "TLSv1.3",
+    "expiresAt": "Jan 16 20:12:28 2027 GMT"
+  },
+  "checks": {
+    "allServicesRunning": true,
+    "databaseAndServerHealthy": true,
+    "serverWorkerSameImage": true,
+    "immutableSourceImage": true,
+    "imageRevisionMatchesDeployment": true,
+    "rateLimitRestored": true,
+    "workerSkipsPreflight": true,
+    "databaseAndRedisPrivate": true,
+    "persistentDockerAndContainerd": true,
+    "mountRequiredBeforeDaemons": true,
+    "environmentPrivate": true,
+    "registryCredentialsCleaned": true,
+    "publicHealthOk": true,
+    "webIngressEnabled": true,
+    "goldenBaselineReady": true
+  }
+}

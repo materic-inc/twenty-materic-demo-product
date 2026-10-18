@@ -1,0 +1,939 @@
+{
+  "profile": "full",
+  "asOf": "2026-10-18T16:00:00.000Z",
+  "target": "https://twenty-stuard-demo-product.materic.inc",
+  "verifiedAt": "2026-10-18T21:24:10.120Z",
+  "counts": {
+    "companies": 5000,
+    "people": 25000,
+    "opportunities": 8000,
+    "tasks": 24000,
+    "notes": 20000,
+    "taskTargets": 72000,
+    "noteTargets": 60000,
+    "workspaceMembers": 81
+  },
+  "dateSamples": [
+    {
+      "kind": "companies",
+      "id": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "3c56a5d2-9554-4ff1-a37c-928b4c6df4eb",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "7922b712-320c-403f-a68d-fbb150fa1bed",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "d63c04f4-168b-4848-a34a-fc88cc9c8c4c",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "94502b9d-31f2-4aea-a263-2ac6417ac205",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "35d462ac-164d-4274-a06d-85b43f512b03",
+      "createdAt": "2025-08-04T16:00:00.000Z",
+      "updatedAt": "2026-01-05T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "36f3205e-bd6e-4e43-a08d-08f81c37d877",
+      "createdAt": "2025-08-28T16:00:00.000Z",
+      "updatedAt": "2026-04-22T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "6b3b76a0-18d2-480c-a744-93f10ee2981d",
+      "createdAt": "2025-10-08T16:00:00.000Z",
+      "updatedAt": "2026-09-24T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "cbe6c406-10c5-408a-a544-74862736afbb",
+      "createdAt": "2026-08-17T16:00:00.000Z",
+      "updatedAt": "2026-08-29T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "9ba8116e-9155-433c-a0e0-eea353cc84a6",
+      "createdAt": "2026-07-12T16:00:00.000Z",
+      "updatedAt": "2026-07-13T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "37aa462b-476a-4b4c-ad68-7a1580a7f56d",
+      "createdAt": "2026-03-15T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "86eae9fb-afd1-4f6c-a66f-20d296e21ca0",
+      "createdAt": "2026-04-01T16:00:00.000Z",
+      "updatedAt": "2026-05-07T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "daa2f1bd-0018-4661-acb6-2884bb9da8d0",
+      "createdAt": "2026-05-28T16:00:00.000Z",
+      "updatedAt": "2026-07-31T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "f1314361-515c-4ebc-a532-f4cfff94353f",
+      "createdAt": "2026-06-15T16:00:00.000Z",
+      "updatedAt": "2026-06-27T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "c39f6924-3f62-491a-a3be-1a61966f08fc",
+      "createdAt": "2026-09-14T16:00:00.000Z",
+      "updatedAt": "2026-09-15T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "ef79a2da-47c5-4a1a-ab91-fa1914f18e58",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "9d25cb38-5c7d-40a9-ad35-5b3c2874b681",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "54342117-9e8c-43d9-a3a0-0887b82eeee3",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-14T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "9c58c0dd-c0ec-4c60-a238-69691837120f",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "d3b0a7ec-1be3-4f80-ae30-eec8e55a80c3",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "10764d4f-6cd0-466f-af31-e1ed700fdff8",
+      "createdAt": "2026-05-17T16:00:00.000Z",
+      "updatedAt": "2026-09-22T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "9430fe2b-4052-4fee-a739-0688a8302098",
+      "createdAt": "2026-06-11T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "75a53dc2-e478-4d63-a2a8-2010ca9432e5",
+      "createdAt": "2026-07-20T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "f24bdaf7-a7ba-44d7-a201-2487fee58647",
+      "createdAt": "2026-07-22T16:00:00.000Z",
+      "updatedAt": "2026-08-03T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "a2d5f3ec-35e0-4cbd-aff9-7e0a0a54739d",
+      "createdAt": "2026-10-06T16:00:00.000Z",
+      "updatedAt": "2026-10-07T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "188abc2b-1083-4a4b-a8b7-938492987a8c",
+      "createdAt": "2026-03-10T16:00:00.000Z",
+      "updatedAt": "2026-05-29T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "4005778b-7587-4563-af2c-ded68b060830",
+      "createdAt": "2026-03-27T16:00:00.000Z",
+      "updatedAt": "2026-08-16T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "d07e8c46-a4e9-413c-af73-bfbfbce671f2",
+      "createdAt": "2026-04-08T16:00:00.000Z",
+      "updatedAt": "2026-10-09T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "d0626cb7-f255-4b3d-a2b0-7f953d4b5397",
+      "createdAt": "2026-05-15T16:00:00.000Z",
+      "updatedAt": "2026-05-27T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "878844d8-b324-4546-a997-89ab99e71d08",
+      "createdAt": "2026-04-15T16:00:00.000Z",
+      "updatedAt": "2026-04-16T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "52a0d497-dc5f-4d1b-a77c-a02c8f406dd4",
+      "createdAt": "2026-10-07T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "d51c70f2-b431-4f84-ac6e-50abff4956f6",
+      "createdAt": "2026-10-15T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "2e1d8c0a-722f-435a-a634-3f55f817b20d",
+      "createdAt": "2026-10-15T16:00:00.000Z",
+      "updatedAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "fe532967-2df6-489e-aa42-22a697b929de",
+      "createdAt": "2026-10-15T16:00:00.000Z",
+      "updatedAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "d6ebbda5-f2d7-4aa6-a3ad-718b2e38dc5e",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "2da2efc5-81de-473d-a189-41ada36ac950",
+      "createdAt": "2026-05-07T16:00:00.000Z",
+      "updatedAt": "2026-06-02T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "7577afae-5bc3-42a0-a355-2effdaa3da82",
+      "createdAt": "2026-06-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "cfa36747-8df2-406c-a50d-b3539f87072b",
+      "createdAt": "2026-07-29T16:00:00.000Z",
+      "updatedAt": "2026-09-30T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "48e932e2-e86d-42d4-a39e-4d7fa969a732",
+      "createdAt": "2026-10-10T16:00:00.000Z",
+      "updatedAt": "2026-10-13T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "9eb5e4a0-bd3d-4537-ae3a-1afb664234c6",
+      "createdAt": "2026-10-13T16:00:00.000Z",
+      "updatedAt": "2026-10-14T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "420a4bf4-636c-4c34-a6b1-249b5fe174b6",
+      "createdAt": "2026-03-04T16:00:00.000Z",
+      "updatedAt": "2026-08-08T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "e36fdd2c-03d3-4a4b-a863-23df30aeb05e",
+      "createdAt": "2026-03-05T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "24dd262a-f826-46cd-a04d-7c1d8a72f605",
+      "createdAt": "2026-06-01T16:00:00.000Z",
+      "updatedAt": "2026-09-22T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "e18c0fea-8b9a-4fd8-ac4d-1d73b92ca747",
+      "createdAt": "2026-07-04T16:00:00.000Z",
+      "updatedAt": "2026-07-16T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "6b4fd49b-ea20-4054-a373-08db00218c8e",
+      "createdAt": "2026-08-05T16:00:00.000Z",
+      "updatedAt": "2026-08-06T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "5873ee72-84ad-41fa-a3b9-0f0cfc0eba83",
+      "createdAt": "2026-10-13T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "dd28733b-7384-49a1-a2be-db6f48d4babb",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "ced35aaa-2b44-4efc-a315-3cc3f92c8921",
+      "createdAt": "2026-10-17T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "4791e2a8-162e-4c93-a989-43eef1ed0157",
+      "createdAt": "2026-10-17T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "5ece21c3-37ae-4baa-a4af-ca3a97558e32",
+      "createdAt": "2026-10-17T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "92867b7b-f03a-43eb-afd2-a98dc51df4cd",
+      "createdAt": "2026-08-08T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "68bd8ac9-94c0-420e-a157-ed1d876eb5e7",
+      "createdAt": "2026-09-13T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "40221c98-3c4a-4a00-a579-6385f1b620fd",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "6bf4f49b-86bb-43c5-a744-52598e3a7427",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "7dbcb3df-bf85-4847-a93a-6a1367135366",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "3363aa2f-2158-496c-adee-977d118067ea",
+      "createdAt": "2025-10-26T16:00:00.000Z",
+      "updatedAt": "2026-05-02T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "cf3ad0db-1224-45a8-ab77-2a67e5d75cb3",
+      "createdAt": "2025-12-01T16:00:00.000Z",
+      "updatedAt": "2026-03-04T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "8af7c5a9-c30e-4545-a719-079d86b4cf3f",
+      "createdAt": "2026-02-08T16:00:00.000Z",
+      "updatedAt": "2026-03-15T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "df0a3b84-77a3-4e86-acc7-d42269cd8bcd",
+      "createdAt": "2026-04-25T16:00:00.000Z",
+      "updatedAt": "2026-05-07T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "2c299bea-6f21-4987-a39b-b0113334307c",
+      "createdAt": "2026-06-01T16:00:00.000Z",
+      "updatedAt": "2026-06-02T16:00:00.000Z"
+    }
+  ],
+  "authorSamples": [
+    {
+      "id": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "3c56a5d2-9554-4ff1-a37c-928b4c6df4eb",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "7922b712-320c-403f-a68d-fbb150fa1bed",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d63c04f4-168b-4848-a34a-fc88cc9c8c4c",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "94502b9d-31f2-4aea-a263-2ac6417ac205",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "35d462ac-164d-4274-a06d-85b43f512b03",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "36f3205e-bd6e-4e43-a08d-08f81c37d877",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "6b3b76a0-18d2-480c-a744-93f10ee2981d",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "cbe6c406-10c5-408a-a544-74862736afbb",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "9ba8116e-9155-433c-a0e0-eea353cc84a6",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "37aa462b-476a-4b4c-ad68-7a1580a7f56d",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "86eae9fb-afd1-4f6c-a66f-20d296e21ca0",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "daa2f1bd-0018-4661-acb6-2884bb9da8d0",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "f1314361-515c-4ebc-a532-f4cfff94353f",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "c39f6924-3f62-491a-a3be-1a61966f08fc",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "ef79a2da-47c5-4a1a-ab91-fa1914f18e58",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "9d25cb38-5c7d-40a9-ad35-5b3c2874b681",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "54342117-9e8c-43d9-a3a0-0887b82eeee3",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "9c58c0dd-c0ec-4c60-a238-69691837120f",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d3b0a7ec-1be3-4f80-ae30-eec8e55a80c3",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "10764d4f-6cd0-466f-af31-e1ed700fdff8",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "9430fe2b-4052-4fee-a739-0688a8302098",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "75a53dc2-e478-4d63-a2a8-2010ca9432e5",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "f24bdaf7-a7ba-44d7-a201-2487fee58647",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "a2d5f3ec-35e0-4cbd-aff9-7e0a0a54739d",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "188abc2b-1083-4a4b-a8b7-938492987a8c",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "4005778b-7587-4563-af2c-ded68b060830",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d07e8c46-a4e9-413c-af73-bfbfbce671f2",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d0626cb7-f255-4b3d-a2b0-7f953d4b5397",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "878844d8-b324-4546-a997-89ab99e71d08",
+      "workspaceMemberId": "100cf3af-5f02-4285-ad16-d2e3a65d1593",
+      "name": "Mei Walker",
+      "source": "MANUAL"
+    },
+    {
+      "id": "52a0d497-dc5f-4d1b-a77c-a02c8f406dd4",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d51c70f2-b431-4f84-ac6e-50abff4956f6",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "2e1d8c0a-722f-435a-a634-3f55f817b20d",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "fe532967-2df6-489e-aa42-22a697b929de",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d6ebbda5-f2d7-4aa6-a3ad-718b2e38dc5e",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "2da2efc5-81de-473d-a189-41ada36ac950",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "7577afae-5bc3-42a0-a355-2effdaa3da82",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "cfa36747-8df2-406c-a50d-b3539f87072b",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "48e932e2-e86d-42d4-a39e-4d7fa969a732",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "9eb5e4a0-bd3d-4537-ae3a-1afb664234c6",
+      "workspaceMemberId": "9c57f297-005b-4539-bea3-f9a4fe07e7e6",
+      "name": "Freya Park",
+      "source": "MANUAL"
+    },
+    {
+      "id": "420a4bf4-636c-4c34-a6b1-249b5fe174b6",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "e36fdd2c-03d3-4a4b-a863-23df30aeb05e",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "24dd262a-f826-46cd-a04d-7c1d8a72f605",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "e18c0fea-8b9a-4fd8-ac4d-1d73b92ca747",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "6b4fd49b-ea20-4054-a373-08db00218c8e",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "5873ee72-84ad-41fa-a3b9-0f0cfc0eba83",
+      "workspaceMemberId": "44d67cf4-1dee-46bb-97b2-6923b608b58c",
+      "name": "James Tan",
+      "source": "MANUAL"
+    },
+    {
+      "id": "dd28733b-7384-49a1-a2be-db6f48d4babb",
+      "workspaceMemberId": "44d67cf4-1dee-46bb-97b2-6923b608b58c",
+      "name": "James Tan",
+      "source": "MANUAL"
+    },
+    {
+      "id": "ced35aaa-2b44-4efc-a315-3cc3f92c8921",
+      "workspaceMemberId": "44d67cf4-1dee-46bb-97b2-6923b608b58c",
+      "name": "James Tan",
+      "source": "MANUAL"
+    },
+    {
+      "id": "4791e2a8-162e-4c93-a989-43eef1ed0157",
+      "workspaceMemberId": "44d67cf4-1dee-46bb-97b2-6923b608b58c",
+      "name": "James Tan",
+      "source": "MANUAL"
+    },
+    {
+      "id": "5ece21c3-37ae-4baa-a4af-ca3a97558e32",
+      "workspaceMemberId": "44d67cf4-1dee-46bb-97b2-6923b608b58c",
+      "name": "James Tan",
+      "source": "MANUAL"
+    },
+    {
+      "id": "92867b7b-f03a-43eb-afd2-a98dc51df4cd",
+      "workspaceMemberId": "006b58f5-5336-416d-bf08-2811d24d1630",
+      "name": "Samuel Nguyen",
+      "source": "MANUAL"
+    },
+    {
+      "id": "68bd8ac9-94c0-420e-a157-ed1d876eb5e7",
+      "workspaceMemberId": "006b58f5-5336-416d-bf08-2811d24d1630",
+      "name": "Samuel Nguyen",
+      "source": "MANUAL"
+    },
+    {
+      "id": "40221c98-3c4a-4a00-a579-6385f1b620fd",
+      "workspaceMemberId": "006b58f5-5336-416d-bf08-2811d24d1630",
+      "name": "Samuel Nguyen",
+      "source": "MANUAL"
+    },
+    {
+      "id": "6bf4f49b-86bb-43c5-a744-52598e3a7427",
+      "workspaceMemberId": "006b58f5-5336-416d-bf08-2811d24d1630",
+      "name": "Samuel Nguyen",
+      "source": "MANUAL"
+    },
+    {
+      "id": "7dbcb3df-bf85-4847-a93a-6a1367135366",
+      "workspaceMemberId": "006b58f5-5336-416d-bf08-2811d24d1630",
+      "name": "Samuel Nguyen",
+      "source": "MANUAL"
+    },
+    {
+      "id": "3363aa2f-2158-496c-adee-977d118067ea",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "cf3ad0db-1224-45a8-ab77-2a67e5d75cb3",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "8af7c5a9-c30e-4545-a719-079d86b4cf3f",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "df0a3b84-77a3-4e86-acc7-d42269cd8bcd",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    },
+    {
+      "id": "2c299bea-6f21-4987-a39b-b0113334307c",
+      "workspaceMemberId": "a8a8029a-498c-4f1e-8360-e73a844410c6",
+      "name": "Benjamin Wilson",
+      "source": "MANUAL"
+    }
+  ],
+  "contactNameSamples": [
+    {
+      "companyId": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "companyName": "Northstar Cloud Systems",
+      "names": [
+        "Isaac Okafor",
+        "James Shah",
+        "Leila Hassan",
+        "Gabriel Murphy",
+        "Maya Patel"
+      ]
+    },
+    {
+      "companyId": "35d462ac-164d-4274-a06d-85b43f512b03",
+      "companyName": "Oakridge Insurance",
+      "names": [
+        "Mei Fischer",
+        "Adrian Martin",
+        "Isaac Ivanova",
+        "Maya Santos",
+        "Gabriel Thompson"
+      ]
+    },
+    {
+      "companyId": "37aa462b-476a-4b4c-ad68-7a1580a7f56d",
+      "companyName": "Horizon Energy Americas",
+      "names": [
+        "Maya Bell",
+        "Mei Chen",
+        "Leila Singh",
+        "Gabriel Tan",
+        "Isaac Costa"
+      ]
+    },
+    {
+      "companyId": "ef79a2da-47c5-4a1a-ab91-fa1914f18e58",
+      "companyName": "Northstar Cloud Systems Europe",
+      "names": [
+        "Maya Diaz",
+        "Gabriel Scott",
+        "Isaac Patel",
+        "Leila Shah",
+        "James Martinez"
+      ]
+    },
+    {
+      "companyId": "10764d4f-6cd0-466f-af31-e1ed700fdff8",
+      "companyName": "Oakridge Insurance Europe",
+      "names": [
+        "Mei Hall",
+        "Adrian Fischer",
+        "Maya Garcia",
+        "Isaac Santos",
+        "Gabriel Roberts"
+      ]
+    },
+    {
+      "companyId": "188abc2b-1083-4a4b-a8b7-938492987a8c",
+      "companyName": "Horizon Energy Pacific",
+      "names": [
+        "Isaac Bell",
+        "Leila Martin",
+        "Mei Hayes",
+        "Gabriel Wilson",
+        "Maya Robinson"
+      ]
+    },
+    {
+      "companyId": "52a0d497-dc5f-4d1b-a77c-a02c8f406dd4",
+      "companyName": "Northstar Cloud Systems International",
+      "names": [
+        "Gabriel Lewis",
+        "James Chen",
+        "Leila Martinez",
+        "Maya Reed",
+        "Isaac Diaz"
+      ]
+    },
+    {
+      "companyId": "2da2efc5-81de-473d-a189-41ada36ac950",
+      "companyName": "Oakridge Insurance International",
+      "names": [
+        "Maya Bailey",
+        "Mei Anderson",
+        "Isaac Garcia",
+        "Adrian Hall",
+        "Gabriel Turner"
+      ]
+    },
+    {
+      "companyId": "420a4bf4-636c-4c34-a6b1-249b5fe174b6",
+      "companyName": "Horizon Energy",
+      "names": [
+        "Mei Hassan",
+        "Maya Park",
+        "Gabriel Cooper",
+        "Leila Fischer",
+        "Isaac Robinson"
+      ]
+    },
+    {
+      "companyId": "5873ee72-84ad-41fa-a3b9-0f0cfc0eba83",
+      "companyName": "Northstar Cloud Systems Americas",
+      "names": [
+        "James Hayes",
+        "Leila Chen",
+        "Isaac Reed",
+        "Gabriel Johnson",
+        "Maya Morgan"
+      ]
+    },
+    {
+      "companyId": "92867b7b-f03a-43eb-afd2-a98dc51df4cd",
+      "companyName": "Oakridge Insurance Americas",
+      "names": [
+        "Isaac Bailey",
+        "Mei Singh",
+        "Maya Collins",
+        "Gabriel Clark",
+        "Adrian Anderson"
+      ]
+    },
+    {
+      "companyId": "3363aa2f-2158-496c-adee-977d118067ea",
+      "companyName": "Horizon Energy Europe",
+      "names": [
+        "Mei Shah",
+        "Leila Hall",
+        "Maya Foster",
+        "Isaac Park",
+        "Gabriel Bennett"
+      ]
+    }
+  ],
+  "charts": [
+    {
+      "dashboard": "Revenue overview",
+      "title": "Opportunities by stage",
+      "pointCount": 5
+    },
+    {
+      "dashboard": "Revenue overview",
+      "title": "New opportunities by month",
+      "pointCount": 19
+    },
+    {
+      "dashboard": "Revenue overview",
+      "title": "Accounts by segment",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Accounts by region",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Accounts by industry",
+      "pointCount": 20
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Account health",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Account growth",
+      "pointCount": 18
+    },
+    {
+      "dashboard": "Team operations",
+      "title": "Follow-up status",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Team operations",
+      "title": "Activities created by month",
+      "pointCount": 18
+    },
+    {
+      "dashboard": "Team operations",
+      "title": "Conversations by month",
+      "pointCount": 17
+    }
+  ],
+  "pipelineViews": [
+    {
+      "id": "4b1724e6-323f-4758-99c6-a4dee5018393",
+      "name": "By Stage",
+      "aggregate": "COUNT"
+    },
+    {
+      "id": "94bd703e-256d-4a15-a921-a0c740c204ed",
+      "name": "Enterprise pipeline",
+      "aggregate": "COUNT"
+    }
+  ],
+  "status": "passed"
+}

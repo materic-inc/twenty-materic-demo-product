@@ -1,0 +1,39 @@
+{
+  "verifiedDate": "2026-10-18",
+  "target": "https://twenty-stuard-demo-product.materic.inc",
+  "browserCheckedSourceRevision": "b810688d1105a01220a07f4869b466d11c2a7fbf",
+  "finalSourceRevision": "d98f3b43239b06dd440adb4d0d3d1800a2b2b54b",
+  "finalReleaseChange": "Recovery helper validation and permissions; application source unchanged",
+  "ciRun": "https://github.com/materic-inc/twenty-stuard-demo-product/actions/runs/39169256314",
+  "ciAuthenticatedMemberSmoke": "passed",
+  "finalReleaseOwnerSessionAndPipeline": "passed",
+  "nativeOwnerLogin": "passed",
+  "vmReboot": {
+    "method": "systemctl reboot",
+    "bootStartedAtUtc": "2026-10-18 21:20:12",
+    "automaticRecovery": true,
+    "localApplicationTunnelClosed": true
+  },
+  "postRebootPublicBrowserChecks": {
+    "revenueDashboard": {
+      "accounts": 5000,
+      "contacts": 25000,
+      "opportunities": 8000,
+      "customerContracts": 3420,
+      "nativeChartsRendered": true
+    },
+    "allCompaniesCount": 5000,
+    "enterpriseAccountsFilteredCount": 1635,
+    "enterpriseFieldsAndOwnersRendered": true,
+    "pipeline": {
+      "new": 1708,
+      "screening": 1312,
+      "meeting": 782,
+      "proposal": 778,
+      "customer": 3420,
+      "columnAggregate": "COUNT"
+    }
+  },
+  "publicFileUpload": "Native company Files UI upload; public post-reboot download bytes verified separately",
+  "stuardConnected": false
+}

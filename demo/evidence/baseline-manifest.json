@@ -1,0 +1,15 @@
+{
+  "snapshot": "twenty-stuard-demo-baseline-20261018",
+  "project": "twenty-stuard-demo-product",
+  "capturedAtUtc": "2026-10-18T21:41:02.976Z",
+  "applicationWritesStoppedDuringCapture": true,
+  "sourceRevision": "003ed6bd8a2e9d07e7f77acb8c6b27e9e5e88503",
+  "image": "ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:b2f1b9627840b54c45dd7ae22ce42812e99f89726914e3b0d632e04ea737c817",
+  "seedAsOf": "2026-10-18T16:00:00.000Z",
+  "backupDirectory": "/srv/twenty/backups/twenty-stuard-demo-baseline-20261018",
+  "archives": {
+    "database.dump": {"sha256": "60a338362be51b31fcd7e049d6de6133f051c6260826681bc3f8637e6e00cc1a"},
+    "uploads.tar.gz": {"sha256": "1383e6efc624d6dcf0dee7a559c5aab4484cff9f636a549d3011696f4592aafc"}
+  },
+  "resetProcedure": "Restore the matching database and uploads with this image and the original scoped Infisical secrets; validate in isolation before resetting the live workspace."
+}
