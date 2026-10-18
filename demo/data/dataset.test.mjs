@@ -9,11 +9,18 @@ import {
 } from './dataset.mjs';
 
 const members = Array.from({ length: 8 }, (_, index) => idFor('member', index));
-const dataset = buildDataset({ profile: 'smoke', memberIds: members });
+const memberNames = Object.fromEntries(
+  members.map((id, index) => [id, `Staff ${index + 1}`]),
+);
+const dataset = buildDataset({
+  profile: 'smoke',
+  memberIds: members,
+  memberNames,
+});
 
 test('same snapshot produces the same ids and relationships; staff have unique reserved emails', () => {
   assert.deepEqual(
-    buildDataset({ profile: 'smoke', memberIds: members }),
+    buildDataset({ profile: 'smoke', memberIds: members, memberNames }),
     dataset,
   );
   const staff = teamDirectory();
@@ -28,6 +35,11 @@ test('same snapshot produces the same ids and relationships; staff have unique r
 test('contacts, opportunities, tasks and notes form consistent company histories', () => {
   const companies = new Map(dataset.companies.map((row) => [row.id, row]));
   const people = new Map(dataset.people.map((row) => [row.id, row]));
+  for (const company of companies.values()) {
+    assert.equal(company.createdBy.workspaceMemberId, company.accountOwnerId);
+    assert.equal(company.createdBy.name, memberNames[company.accountOwnerId]);
+    assert.equal(company.createdBy.source, 'MANUAL');
+  }
   for (const contact of people.values()) {
     const company = companies.get(contact.companyId);
     assert.ok(company);
@@ -70,6 +82,14 @@ test('contacts, opportunities, tasks and notes form consistent company histories
         companyId,
       );
       assert.ok(record.bodyV2.markdown.includes(companies.get(companyId).name));
+      assert.equal(
+        record.createdBy.workspaceMemberId,
+        companies.get(companyId).accountOwnerId,
+      );
+      assert.equal(
+        record.createdBy.name,
+        memberNames[record.createdBy.workspaceMemberId],
+      );
       assert.ok(JSON.parse(record.bodyV2.blocknote).length > 1);
     }
   }
@@ -111,7 +131,15 @@ test('history is chronological and data includes meaningful varied states', () =
 });
 
 test('full fixture has substantial breadth and unique companies', () => {
-  const full = buildDataset({ profile: 'full', memberIds: members });
+  const full = buildDataset({
+    profile: 'full',
+    memberIds: members,
+    memberNames,
+  });
+  for (const [kind, rows] of Object.entries(dataset)) {
+    const fullById = new Map(full[kind].map((row) => [row.id, row]));
+    for (const row of rows) assert.deepEqual(row, fullById.get(row.id));
+  }
   for (const [kind, count] of Object.entries(PROFILES.full))
     assert.equal(full[kind].length, count);
   assert.equal(new Set(full.companies.map((row) => row.name)).size, 5000);
@@ -130,6 +158,9 @@ test('full fixture has substantial breadth and unique companies', () => {
   );
   assert.equal(recentCompanies.length, 750);
   const peopleById = new Map(full.people.map((person) => [person.id, person]));
+  const namesByCompany = new Map(full.companies.map((company)=>[company.id,new Set()]));
+  for(const person of full.people) namesByCompany.get(person.companyId).add(`${person.name.firstName} ${person.name.lastName}`);
+  for(const names of namesByCompany.values()) assert.equal(names.size,5,'Each company needs five distinct contact names');
   const companiesById = new Map(
     full.companies.map((company) => [company.id, company]),
   );

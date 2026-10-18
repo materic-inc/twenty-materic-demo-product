@@ -21,6 +21,11 @@ if [ -s /srv/twenty/current-image ]; then export TWENTY_IMAGE="$(cat /srv/twenty
 compose() { sudo --preserve-env=TWENTY_IMAGE docker compose --progress quiet --env-file /etc/twenty-demo/.env -f /srv/twenty/deploy/compose.yaml "$@"; }
 compose stop worker server
 sudo install -d -m 700 /srv/twenty/backups/BASELINE_NAME
+compose exec -T postgres psql -U twenty -d twenty -At -v ON_ERROR_STOP=1 <<'SQL' | sudo tee /srv/twenty/backups/BASELINE_NAME/counts.ndjson >/dev/null
+SELECT format($query$SELECT json_build_object('schema', %L, 'companies', (SELECT count(*) FROM %I.company WHERE "deletedAt" IS NULL), 'people', (SELECT count(*) FROM %I.person WHERE "deletedAt" IS NULL), 'opportunities', (SELECT count(*) FROM %I.opportunity WHERE "deletedAt" IS NULL))$query$, "databaseSchema", "databaseSchema", "databaseSchema", "databaseSchema")
+FROM core.workspace WHERE "activationStatus" IN ('ACTIVE', 'CREATED') AND "deletedAt" IS NULL AND "databaseSchema" IS NOT NULL
+\gexec
+SQL
 compose exec -T postgres pg_dump -U twenty -d twenty --format=custom | sudo tee /srv/twenty/backups/BASELINE_NAME/database.dump >/dev/null
 compose run --rm --no-deps -T --entrypoint tar server -czf - -C /app/packages/twenty-server/.local-storage . | sudo tee /srv/twenty/backups/BASELINE_NAME/uploads.tar.gz >/dev/null
 sudo chmod 600 /srv/twenty/backups/BASELINE_NAME/*

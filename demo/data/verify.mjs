@@ -13,12 +13,17 @@ const { values } = parseArgs({
     samples: { type: 'string', default: '12' },
     'as-of': { type: 'string', default: DEFAULT_AS_OF },
     report: { type: 'string' },
+    'delay-ms': { type: 'string', default: '700' },
   },
 });
 const { TWENTY_BASE_URL: baseUrl, TWENTY_API_KEY: token } = process.env;
 if (!baseUrl || !token)
   throw new Error('TWENTY_BASE_URL and TWENTY_API_KEY are required');
-const client = createClient({ baseUrl, token });
+const client = createClient({ baseUrl, token, delayMilliseconds:Number(values['delay-ms']) });
+const staff = await client.request('/rest/workspaceMembers?limit=100&depth=0');
+const membersById = new Map(
+  staff.data.workspaceMembers.map((member) => [member.id, member]),
+);
 const baseline = buildDataset({
   profile: values.profile,
   asOf: values['as-of'],
@@ -30,6 +35,8 @@ const report = {
   verifiedAt: new Date().toISOString(),
   counts: {},
   dateSamples: [],
+  authorSamples: [],
+  contactNameSamples: [],
   charts: [],
 };
 const assertDates = (kind, record) => {
@@ -51,6 +58,22 @@ const assertDates = (kind, record) => {
     `${kind} ${record.id}: historical update date did not persist`,
   );
 };
+const assertAuthor = (record, company) => {
+  const member = membersById.get(company.accountOwnerId);
+  assert.ok(member, 'Company owner is not a workspace member');
+  assert.equal(record.createdBy.workspaceMemberId, member.id);
+  assert.equal(
+    record.createdBy.name,
+    `${member.name.firstName} ${member.name.lastName}`.trim(),
+  );
+  assert.equal(record.createdBy.source, 'MANUAL');
+  report.authorSamples.push({
+    id: record.id,
+    workspaceMemberId: member.id,
+    name: record.createdBy.name,
+    source: record.createdBy.source,
+  });
+};
 const expected = {
   ...PROFILES[values.profile],
   taskTargets: PROFILES[values.profile].tasks * 3,
@@ -58,8 +81,9 @@ const expected = {
 };
 for (const [kind, count] of Object.entries(expected)) {
   const response = await client.request(`/rest/${kind}?limit=1&depth=0`);
-  assert.ok(
-    response.totalCount >= count,
+  assert.equal(
+    response.totalCount,
+    count,
     `${kind}: expected at least ${count}, received ${response.totalCount}`,
   );
   report.counts[kind] = response.totalCount;
@@ -76,18 +100,33 @@ for (let sample = 0; sample < Number(values.samples); sample++) {
   const index = Math.floor(
     (sample * expected.opportunities) / Number(values.samples),
   );
-  const opportunity = await find('opportunities', idFor('opportunity', index));
+  const opportunity = await find(
+    'opportunities',
+    baseline.opportunities[index].id,
+  );
   const company = await find('companies', opportunity.companyId);
   const person = await find('people', opportunity.pointOfContactId);
   assertDates('companies', company);
   assertDates('people', person);
   assertDates('opportunities', opportunity);
+  assertAuthor(company, company);
+  assertAuthor(person, company);
+  assertAuthor(opportunity, company);
+  const companyContacts = await client.request(`/rest/people?filter=${encodeURIComponent(`companyId[eq]:${company.id}`)}&limit=100&depth=0`);
+  assert.equal(companyContacts.totalCount,5);
+  const names=companyContacts.data.people.map((contact)=>`${contact.name.firstName} ${contact.name.lastName}`);
+  assert.equal(new Set(names).size,5,`${company.name}: contacts must have distinct names`);
+  report.contactNameSamples.push({companyId:company.id,companyName:company.name,names});
   assert.equal(person.companyId, company.id);
   assert.ok(person.emails.primaryEmail.endsWith('.example'));
   assert.ok(Number(opportunity.amount.amountMicros) > 0);
   for (const kind of ['task', 'note']) {
-    const record = await find(`${kind}s`, idFor(kind, index));
+    const activityTarget = baseline[`${kind}Targets`].find(
+      (target) => target.targetOpportunityId === opportunity.id,
+    );
+    const record = await find(`${kind}s`, activityTarget[`${kind}Id`]);
     assertDates(`${kind}s`, record);
+    assertAuthor(record, company);
     assert.ok(record.bodyV2.markdown.includes(company.name));
     const targets = await client.request(
       `/rest/${kind}Targets?filter=${encodeURIComponent(`${kind}Id[eq]:${record.id}`)}&depth=0`,
@@ -110,7 +149,6 @@ for (let sample = 0; sample < Number(values.samples); sample++) {
     );
   }
 }
-const staff = await client.request('/rest/workspaceMembers?limit=100&depth=0');
 assert.equal(staff.totalCount, 81, 'Expected exactly 80 staff plus the owner');
 report.counts.workspaceMembers = staff.totalCount;
 console.log(`Workspace members: ${staff.totalCount}`);

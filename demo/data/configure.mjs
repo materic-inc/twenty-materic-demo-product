@@ -26,14 +26,14 @@ const customFields = [
   ['customerTier', 'Customer tier', 'TEXT', 'IconBuildingSkyscraper'],
   ['idealCustomerProfile', 'Ideal customer profile', 'BOOLEAN', 'IconTarget'],
 ];
-for (const [name, label, type, icon] of customFields) {
-  if (metadata.companies.fields[name]) continue;
+const ensureField = async (objectName, [name, label, type, icon]) => {
+  if (metadata[objectName].fields[name]) return;
   await client.graphql(
     'mutation DemoField($input:CreateOneFieldMetadataInput!) { createOneField(input:$input) { id } }',
     {
       input: {
         field: {
-          objectMetadataId: metadata.companies.id,
+          objectMetadataId: metadata[objectName].id,
           name,
           label,
           type,
@@ -44,8 +44,10 @@ for (const [name, label, type, icon] of customFields) {
       },
     },
   );
-  console.log(`Configured company field: ${name}`);
-}
+  console.log(`Configured ${objectName} field: ${name}`);
+};
+for (const field of customFields) await ensureField('companies',field);
+await ensureField('people',['city','City','TEXT','IconMapPin']);
 metadata = await listMetadata(client);
 const plans = [
   {
@@ -230,7 +232,14 @@ for (let index = 0; index < plans.length; index++) {
         input: {
           viewId: view.id,
           fieldMetadataId: field.id,
-          operand,
+          operand:
+            field.type === 'TEXT'
+              ? operand === 'IS'
+                ? 'CONTAINS'
+                : operand === 'IS_NOT'
+                  ? 'DOES_NOT_CONTAIN'
+                  : operand
+              : operand,
           value: Array.isArray(value) ? JSON.stringify(value) : value,
         },
       },

@@ -17,9 +17,9 @@ An established fictional B2B software company using Twenty as its CRM. All compa
 
 Companies span 20 industries, 16 cities, three sales regions, three customer tiers and six currencies. Histories cover April 2025 through October 2026. Deals have named contacts at the correct company, account owners, annual amounts, close dates and all five native pipeline stages. Notes describe seat counts, budgets, evaluation criteria, procurement blockers and next steps. Tasks include completed history, overdue work and future follow-ups. Every task and note links separately to its company, contact and opportunity, matching Twenty's polymorphic relationship model.
 
-Configure adds six company fields, three native dashboards with twenty live chart widgets, and eleven shared operational views covering enterprise accounts, accounts needing attention, regional portfolios, pipeline, proposals, contracts, follow-ups, work in progress, completed activities and account conversations. Dashboard charts query persisted CRM data: pipeline stages, monthly opportunity growth, company regions and industries, account health, task completion and conversation history. Financial amounts in different currencies are never combined into a misleading total. Upstream Twenty remains unchanged.
+Configure adds six company fields, a contact City field, three native dashboards with twenty live chart widgets, and eleven shared operational views covering enterprise accounts, accounts needing attention, regional portfolios, pipeline, proposals, contracts, follow-ups, work in progress, completed activities and account conversations. Dashboard charts query persisted CRM data: pipeline stages, monthly opportunity growth, company regions and industries, account health, task completion and conversation history. Financial amounts in different currencies are never combined into a misleading total. Upstream Twenty remains unchanged.
 
-The full dataset contains 214,000 persisted records, excluding staff, three dashboards and server-generated timeline events. The smoke profile uses 12 companies, 60 contacts, 24 opportunities, 72 tasks and 60 notes. Both profiles share deterministic IDs and may be safely upserted into the same demo workspace.
+The full dataset contains 214,000 persisted records, excluding staff, three dashboards and server-generated timeline events. The smoke profile uses 12 companies, 60 contacts, 24 opportunities, 72 tasks and 60 notes. Smoke is an exact subset of the full fixture: each shared ID retains its relationships, timestamps and immutable author when expanding to full. Fifteen percent of accounts are recent inbound prospects from the last two weeks, with fresh early-stage deals.
 
 ## Run
 
@@ -49,6 +49,7 @@ With the complete scoped Infisical environment injected:
 ```sh
 node demo/data/team.mjs --owner-state ~/.local/share/twenty-stuard-demo-product/bootstrap-private/bootstrap-secrets.json
 node demo/data/configure.mjs
+node demo/data/cleanup-upstream-samples.mjs --apply --report demo/evidence/upstream-sample-cleanup.json
 node demo/data/seed.mjs --profile smoke --apply
 node demo/data/verify.mjs --profile smoke --samples 4
 node demo/data/seed.mjs --profile full --apply
@@ -64,6 +65,10 @@ The default private state directory is `~/.local/share/twenty-stuard-demo-produc
 For private imports before opening ingress, keep `TWENTY_BASE_URL` set to the canonical public origin and set `TWENTY_TRANSPORT_URL=http://127.0.0.1:13007` for the IAP tunnel. Requests use the tunnel while checkpoints, credentials and authentication remain pinned to the canonical product. Remove the transport override for subsequent public verification.
 
 `seed.mjs` uses `/rest/batch/{object}?upsert=true` in dependency order. It checks workspace identity from the credential and stops if expected fields or members are missing. Company and opportunity owners cycle through seeded staff. `TWENTY_MEMBER_IDS` can override owner IDs as a comma-separated list.
+
+Created-by attribution uses the actual workspace-member ID and profile name of the company owner. Twenty's native API preserves these explicit fictional historical authors on insertion. Updated-by remains the real API principal. The import never changes audit attribution through direct database writes.
+
+`cleanup-upstream-samples.mjs` removes only the 17 known upstream sample business records: five real-company examples, five founder contacts, six opportunities and the initial sample dashboard. It derives an ID allowlist from the pinned upstream prefill sources and requires each candidate's actor to be SYSTEM. Other records, all 81 users and native workflow templates are preserved. Without `--apply`, it only previews the allowlisted candidates.
 
 Successful batches are fingerprinted in a private checkpoint. Rerunning resumes after a failure without duplicating records. After restoring a database snapshot, use `--skip-checkpoint` or clear that target's local checkpoint so missing records are replayed. Never reuse checkpoints between workspace IDs.
 

@@ -34,6 +34,7 @@ let memberIds = (process.env.TWENTY_MEMBER_IDS || '')
   .filter(Boolean);
 let client;
 let metadata;
+let memberNames = {};
 if (values.apply) {
   if (!baseUrl || !token)
     throw new Error(
@@ -55,7 +56,7 @@ if (values.apply) {
     delayMilliseconds: Number(values['delay-ms']),
   });
   metadata = await listMetadata(client);
-  if (!memberIds.length) {
+  {
     const response = await client.request(
       '/rest/workspaceMembers?limit=100&depth=0',
     );
@@ -63,10 +64,21 @@ if (values.apply) {
       (left, right) =>
         (left.userEmail || '').localeCompare(right.userEmail || ''),
     );
-    memberIds = members
-      .filter((member) => member.userEmail?.endsWith('@meridian.example'))
-      .map((member) => member.id);
+    memberNames = Object.fromEntries(
+      members.map((member) => [
+        member.id,
+        `${member.name?.firstName || ''} ${member.name?.lastName || ''}`.trim(),
+      ]),
+    );
+    if (!memberIds.length)
+      memberIds = members
+        .filter((member) => member.userEmail?.endsWith('@meridian.example'))
+        .map((member) => member.id);
     if (!memberIds.length) memberIds = members.map((member) => member.id);
+    if (memberIds.some((id) => !memberNames[id]))
+      throw new Error(
+        'Every selected owner must have a complete real workspace member profile',
+      );
   }
   if (!memberIds.length)
     throw new Error(
@@ -77,6 +89,7 @@ const dataset = buildDataset({
   profile: values.profile,
   asOf: values['as-of'],
   memberIds,
+  memberNames,
 });
 console.log(
   JSON.stringify(
@@ -125,7 +138,8 @@ if (values.apply) {
       (name) =>
         rows[0][name] !== undefined &&
         !metadata[plural].fields[name] &&
-        !(name.endsWith('Id') && metadata[plural].fields[name.slice(0, -2)]),
+        !(name.endsWith('Id') && metadata[plural].fields[name.slice(0, -2)]) &&
+        !Object.values(metadata[plural].fields).some((field) => field.type === 'MORPH_RELATION' && name.startsWith(field.name) && /^[A-Z][A-Za-z0-9]*Id$/.test(name.slice(field.name.length))),
     );
     if (missingFields.length)
       throw new Error(

@@ -71,6 +71,16 @@ Copy backups to separate durable storage and test restoring into an isolated dep
 
 Only after synthetic import and product QA finish, run `bash demo/deploy/golden-baseline.sh twenty-stuard-demo-baseline-YYYYMMDD`. This stops application writes, creates a checked PostgreSQL dump and matching uploads archive, creates a named manual GCP snapshot while writes remain stopped, then restarts the application. The manual snapshot is separate from the rolling seven-day policy and has no scheduled expiration. Record the snapshot name, image digest and Git revision with the seed manifest.
 
+The backup includes company, person and opportunity counts captured with writes stopped. Prove the database archive is restorable without touching the live database:
+
+```sh
+python3 demo/deploy/verify-baseline-restore.py \
+  --baseline=twenty-stuard-demo-baseline-YYYYMMDD \
+  --output=demo/evidence/baseline-restore-verification.json
+```
+
+This creates a uniquely named verification database on the same PostgreSQL instance, restores the archive there, compares its record counts with the saved baseline, and drops only that temporary database. The saved report contains counts and success status.
+
 For recovery, create a separate disk from that snapshot instead of replacing the live disk:
 
 ```sh

@@ -1,0 +1,359 @@
+{
+  "profile": "smoke",
+  "asOf": "2026-10-18T16:00:00.000Z",
+  "target": "https://twenty-stuard-demo-product.materic.inc",
+  "verifiedAt": "2026-10-18T20:40:11.307Z",
+  "counts": {
+    "companies": 12,
+    "people": 60,
+    "opportunities": 24,
+    "tasks": 72,
+    "notes": 60,
+    "taskTargets": 216,
+    "noteTargets": 180,
+    "workspaceMembers": 81
+  },
+  "dateSamples": [
+    {
+      "kind": "companies",
+      "id": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "3c56a5d2-9554-4ff1-a37c-928b4c6df4eb",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "7922b712-320c-403f-a68d-fbb150fa1bed",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "d63c04f4-168b-4848-a34a-fc88cc9c8c4c",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "94502b9d-31f2-4aea-a263-2ac6417ac205",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "55d8145f-c778-4bc4-ae69-db96b3b68f9f",
+      "createdAt": "2026-06-16T16:00:00.000Z",
+      "updatedAt": "2026-09-16T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "64246fb8-1c43-4c2a-abe3-97825f465fe6",
+      "createdAt": "2026-07-15T16:00:00.000Z",
+      "updatedAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "ae300028-92d8-44d4-a003-108829b12de0",
+      "createdAt": "2026-08-22T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "0daa2b93-5bd2-42e9-aee8-860c6d16f488",
+      "createdAt": "2026-09-02T16:00:00.000Z",
+      "updatedAt": "2026-09-14T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "ff3b02d6-5373-468f-aa9d-d26a64ba1aa2",
+      "createdAt": "2026-09-06T16:00:00.000Z",
+      "updatedAt": "2026-09-07T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "createdAt": "2026-10-14T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "efe614c5-a81c-43e6-aab7-3d558f206834",
+      "createdAt": "2026-10-16T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "8cf243b8-e74f-4eff-a24e-1678199ad064",
+      "createdAt": "2026-10-17T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "de07ed23-d4ba-4103-a08a-19b46a12ea2c",
+      "createdAt": "2026-10-17T16:00:00.000Z",
+      "updatedAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "41be7447-a4b1-4711-a96f-6061c4f7e27e",
+      "createdAt": "2026-10-17T16:00:00.000Z",
+      "updatedAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "kind": "companies",
+      "id": "55d8145f-c778-4bc4-ae69-db96b3b68f9f",
+      "createdAt": "2026-06-16T16:00:00.000Z",
+      "updatedAt": "2026-09-16T16:00:00.000Z"
+    },
+    {
+      "kind": "people",
+      "id": "dd89f0f5-b1c0-4035-ac69-fc03f5e8463c",
+      "createdAt": "2026-06-27T16:00:00.000Z",
+      "updatedAt": "2026-09-03T16:00:00.000Z"
+    },
+    {
+      "kind": "opportunities",
+      "id": "8f0529b5-6d45-4af5-a454-a31a72dd3a5c",
+      "createdAt": "2026-06-28T16:00:00.000Z",
+      "updatedAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "kind": "tasks",
+      "id": "4d5f0374-43fb-4fac-ad1e-b0f56a26accc",
+      "createdAt": "2026-07-01T16:00:00.000Z",
+      "updatedAt": "2026-07-13T16:00:00.000Z"
+    },
+    {
+      "kind": "notes",
+      "id": "ea5466b1-8116-4ece-a3e1-66fb0e26dd42",
+      "createdAt": "2026-10-09T16:00:00.000Z",
+      "updatedAt": "2026-10-10T16:00:00.000Z"
+    }
+  ],
+  "authorSamples": [
+    {
+      "id": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "3c56a5d2-9554-4ff1-a37c-928b4c6df4eb",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "7922b712-320c-403f-a68d-fbb150fa1bed",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "d63c04f4-168b-4848-a34a-fc88cc9c8c4c",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "94502b9d-31f2-4aea-a263-2ac6417ac205",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "55d8145f-c778-4bc4-ae69-db96b3b68f9f",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "64246fb8-1c43-4c2a-abe3-97825f465fe6",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "ae300028-92d8-44d4-a003-108829b12de0",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "0daa2b93-5bd2-42e9-aee8-860c6d16f488",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "ff3b02d6-5373-468f-aa9d-d26a64ba1aa2",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "efe614c5-a81c-43e6-aab7-3d558f206834",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "8cf243b8-e74f-4eff-a24e-1678199ad064",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "de07ed23-d4ba-4103-a08a-19b46a12ea2c",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "41be7447-a4b1-4711-a96f-6061c4f7e27e",
+      "workspaceMemberId": "33bcafc6-6f3c-473f-bfc0-795b706f88fc",
+      "name": "Ada Hayes",
+      "source": "MANUAL"
+    },
+    {
+      "id": "55d8145f-c778-4bc4-ae69-db96b3b68f9f",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "dd89f0f5-b1c0-4035-ac69-fc03f5e8463c",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "8f0529b5-6d45-4af5-a454-a31a72dd3a5c",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "4d5f0374-43fb-4fac-ad1e-b0f56a26accc",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    },
+    {
+      "id": "ea5466b1-8116-4ece-a3e1-66fb0e26dd42",
+      "workspaceMemberId": "606b1698-e4d0-49e6-82d9-c46c20c4df5c",
+      "name": "Alexander Murphy",
+      "source": "MANUAL"
+    }
+  ],
+  "contactNameSamples": [
+    {
+      "companyId": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "companyName": "Northstar Cloud Systems",
+      "names": [
+        "Isaac Okafor",
+        "James Shah",
+        "Leila Hassan",
+        "Gabriel Murphy",
+        "Maya Patel"
+      ]
+    },
+    {
+      "companyId": "55d8145f-c778-4bc4-ae69-db96b3b68f9f",
+      "companyName": "Summit Cloud Systems",
+      "names": [
+        "Alexander Wright",
+        "Lucas Morgan",
+        "Oscar Nakamura",
+        "Aisha Kim",
+        "Sienna Reed"
+      ]
+    },
+    {
+      "companyId": "db4d9ba3-d25e-4621-a1bf-1413e00266bb",
+      "companyName": "Northstar Cloud Systems",
+      "names": [
+        "Isaac Okafor",
+        "James Shah",
+        "Leila Hassan",
+        "Gabriel Murphy",
+        "Maya Patel"
+      ]
+    },
+    {
+      "companyId": "55d8145f-c778-4bc4-ae69-db96b3b68f9f",
+      "companyName": "Summit Cloud Systems",
+      "names": [
+        "Alexander Wright",
+        "Lucas Morgan",
+        "Oscar Nakamura",
+        "Aisha Kim",
+        "Sienna Reed"
+      ]
+    }
+  ],
+  "charts": [
+    {
+      "dashboard": "Revenue overview",
+      "title": "Opportunities by stage",
+      "pointCount": 5
+    },
+    {
+      "dashboard": "Revenue overview",
+      "title": "New opportunities by month",
+      "pointCount": 11
+    },
+    {
+      "dashboard": "Revenue overview",
+      "title": "Accounts by segment",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Accounts by region",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Accounts by industry",
+      "pointCount": 1
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Account health",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Customer portfolio",
+      "title": "Account growth",
+      "pointCount": 7
+    },
+    {
+      "dashboard": "Team operations",
+      "title": "Follow-up status",
+      "pointCount": 3
+    },
+    {
+      "dashboard": "Team operations",
+      "title": "Activities created by month",
+      "pointCount": 10
+    },
+    {
+      "dashboard": "Team operations",
+      "title": "Conversations by month",
+      "pointCount": 10
+    }
+  ],
+  "status": "passed"
+}

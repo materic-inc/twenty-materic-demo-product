@@ -200,6 +200,7 @@ export function buildDataset({
   counts = PROFILES[profile],
   asOf = DEFAULT_AS_OF,
   memberIds = [],
+  memberNames = {},
 } = {}) {
   if (
     !counts ||
@@ -210,11 +211,60 @@ export function buildDataset({
     throw new Error(
       'Need at least one contact per company, and opportunities cannot exceed contacts',
     );
+  if (profile === 'smoke' && counts === PROFILES.smoke) {
+    const full = buildDataset({
+      profile: 'full',
+      asOf,
+      memberIds,
+      memberNames,
+    });
+    const companies = full.companies.slice(0, counts.companies);
+    const companyIds = new Set(companies.map((record) => record.id));
+    const people = full.people.filter((record) =>
+      companyIds.has(record.companyId),
+    );
+    const opportunities = full.opportunities.filter((record) =>
+      companyIds.has(record.companyId),
+    );
+    const opportunityIds = new Set(opportunities.map((record) => record.id));
+    const taskIds = new Set(
+      full.taskTargets
+        .filter((target) => opportunityIds.has(target.targetOpportunityId))
+        .map((target) => target.taskId),
+    );
+    const noteIds = new Set(
+      full.noteTargets
+        .filter((target) => opportunityIds.has(target.targetOpportunityId))
+        .map((target) => target.noteId),
+    );
+    return {
+      companies,
+      people,
+      opportunities,
+      tasks: full.tasks.filter((record) => taskIds.has(record.id)),
+      notes: full.notes.filter((record) => noteIds.has(record.id)),
+      taskTargets: full.taskTargets.filter((target) =>
+        taskIds.has(target.taskId),
+      ),
+      noteTargets: full.noteTargets.filter((target) =>
+        noteIds.has(target.noteId),
+      ),
+    };
+  }
   const now = Date.parse(asOf);
   if (!Number.isFinite(now)) throw new Error('Invalid as-of date');
   const start = now - 548 * DAY;
   const owner = (index) =>
     memberIds.length ? memberIds[index % memberIds.length] : undefined;
+  const author = (index) =>
+    owner(index)
+      ? {
+          source: 'MANUAL',
+          workspaceMemberId: owner(index),
+          name: memberNames[owner(index)] || 'Meridian Cloud team',
+          context: { synthetic: true },
+        }
+      : undefined;
   const datasets = {
     companies: [],
     people: [],
@@ -251,6 +301,7 @@ export function buildDataset({
     companyContexts.push({ vertical, city, domain, created });
     datasets.companies.push({
       id: idFor('company', index),
+      createdBy: author(index),
       name,
       domainName: {
         primaryLinkUrl: `https://${domain}`,
@@ -301,7 +352,7 @@ export function buildDataset({
     const random = randomFor('person', index);
     const companyIndex = index % counts.companies;
     const context = companyContexts[companyIndex];
-    const name = personName(index + 83);
+    const name = personName(index + 83 + Math.floor(index / counts.companies) * 17);
     const contactWindowDays = Math.min(
       45,
       Math.floor((now - DAY - context.created) / DAY) + 1,
@@ -310,6 +361,7 @@ export function buildDataset({
       context.created + Math.floor(random() * contactWindowDays) * DAY;
     datasets.people.push({
       id: idFor('person', index),
+      createdBy: author(companyIndex),
       name,
       emails: {
         primaryEmail: `${name.firstName.toLowerCase()}.${name.lastName.toLowerCase()}.${Math.floor(index / counts.companies) + 1}@${context.domain}`,
@@ -375,6 +427,7 @@ export function buildDataset({
       ) * 100;
     datasets.opportunities.push({
       id: idFor('opportunity', index),
+      createdBy: author(companyIndex),
       name: `${company.name} · ${product} · ${motion}`,
       amount: {
         amountMicros: String(amount * 1e6),
@@ -450,6 +503,7 @@ export function buildDataset({
               : 'IN_PROGRESS';
         datasets.tasks.push({
           id: idFor('task', index),
+          createdBy: author(companyIndex),
           title: `${action} — ${company.name}`,
           bodyV2: richText(`${businessCase}\n\n${nextStep}`, `task-${index}`),
           status,
@@ -500,6 +554,7 @@ export function buildDataset({
         const markdown = `${title} — ${company.name}\n\nMet with ${contactName}, ${contact.jobTitle}, on ${iso(created).slice(0, 10)}. ${businessCase}\n\nSuccess criteria: ${20 + Math.floor(random() * 45)}% less manual reporting; ${75 + Math.floor(random() * 20)}% weekly active usage across ${seats} licensed seats. Budget owner confirmed ${opportunity.amount.currencyCode} ${Math.round(Number(opportunity.amount.amountMicros) / 1e6).toLocaleString('en-US')} annual scope.\n\n${blocker}.\n\nNext steps: ${nextStep}`;
         datasets.notes.push({
           id: idFor('note', index),
+          createdBy: author(companyIndex),
           title: `${title} — ${company.name}`,
           bodyV2: richText(markdown, `note-${index}`),
           position: index,

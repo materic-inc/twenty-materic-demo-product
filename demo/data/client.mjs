@@ -77,7 +77,7 @@ export function createClient({ baseUrl, token, delayMilliseconds = 700 }) {
 
 export async function listMetadata(client) {
   const data = await client.graphql(
-    'query DemoObjects { objects(paging: { first: 100 }) { edges { node { id nameSingular namePlural fields { edges { node { id name type } } } } } } }',
+    'query DemoObjects { objects(paging: { first: 100 }) { edges { node { id nameSingular namePlural fields(paging: { first: 1000 }) { edges { node { id name type } } } } } } }',
   );
   return Object.fromEntries(
     data.objects.edges.map(({ node }) => [

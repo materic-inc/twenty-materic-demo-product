@@ -10,7 +10,14 @@ export function buildDashboardPlans(metadata) {
     recordFilters: [
       {
         fieldMetadataId: field(object, name),
-        operand,
+        operand:
+          metadata[object].fields[name].type === 'TEXT'
+            ? operand === 'IS'
+              ? 'CONTAINS'
+              : operand === 'IS_NOT'
+                ? 'DOES_NOT_CONTAIN'
+                : operand
+            : operand,
         value: Array.isArray(value) ? JSON.stringify(value) : value,
       },
     ],

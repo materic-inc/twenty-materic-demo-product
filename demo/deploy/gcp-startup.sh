@@ -32,6 +32,16 @@ if ! command -v docker >/dev/null 2>&1; then
   DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 fi
 
+if grep -q '"data-root"[[:space:]]*:[[:space:]]*"/srv/twenty/docker"' /etc/docker/daemon.json 2>/dev/null \
+  && grep -q '^root = "/srv/twenty/containerd"' /etc/containerd/config.toml 2>/dev/null \
+  && grep -q '^RequiresMountsFor=/srv/twenty$' /etc/systemd/system/docker.service.d/twenty-storage.conf 2>/dev/null \
+  && grep -q '^RequiresMountsFor=/srv/twenty$' /etc/systemd/system/containerd.service.d/twenty-storage.conf 2>/dev/null; then
+  systemctl enable docker.service
+  systemctl start containerd.service docker.service
+  echo "Twenty persistent container runtime already configured."
+  exit 0
+fi
+
 systemctl stop docker.service docker.socket containerd.service
 mkdir -p /srv/twenty/containerd
 if [[ ! -e /srv/twenty/containerd/.migrated ]]; then

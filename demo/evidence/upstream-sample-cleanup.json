@@ -1,0 +1,108 @@
+{
+  "workspaceId": "5cabb0d3-6391-464c-8dda-281d636771c1",
+  "verifiedAt": "2026-10-18T20:32:31.796Z",
+  "applied": true,
+  "removed": [
+    {
+      "object": "opportunities",
+      "id": "2beb07b0-340c-41d7-be33-5aa91757f329",
+      "upstreamConstant": "OPPORTUNITY_STRIPE_API_INTEGRATION_ID"
+    },
+    {
+      "object": "opportunities",
+      "id": "75de302f-1044-4957-8da4-1f67ebefd52b",
+      "upstreamConstant": "OPPORTUNITY_NOTION_WORKSPACE_ID"
+    },
+    {
+      "object": "opportunities",
+      "id": "822639e5-9bf7-40f1-8882-a11140362339",
+      "upstreamConstant": "OPPORTUNITY_STRIPE_PLATFORM_MIGRATION_ID"
+    },
+    {
+      "object": "opportunities",
+      "id": "9457f8e9-16ae-43b9-92ee-cbd21f3dded5",
+      "upstreamConstant": "OPPORTUNITY_FIGMA_DESIGN_ID"
+    },
+    {
+      "object": "opportunities",
+      "id": "9543adcf-ec03-44e2-9233-3c2d3ebae98a",
+      "upstreamConstant": "OPPORTUNITY_AIRBNB_ENTERPRISE_ID"
+    },
+    {
+      "object": "opportunities",
+      "id": "fc747edc-cb00-4078-8d6b-1fab2611dae4",
+      "upstreamConstant": "OPPORTUNITY_ANTHROPIC_AI_MODEL_ID"
+    },
+    {
+      "object": "people",
+      "id": "7a93d1e5-3f74-4945-8a65-d7f996083f72",
+      "upstreamConstant": "IVAN_ZHAO_ID"
+    },
+    {
+      "object": "people",
+      "id": "93c72d2e-e65c-44c4-99ad-f87f50349dcf",
+      "upstreamConstant": "DARIO_AMODEI_ID"
+    },
+    {
+      "object": "people",
+      "id": "a2e78a5e-338b-46df-8811-fa08c7d19d35",
+      "upstreamConstant": "BRIAN_CHESKY_ID"
+    },
+    {
+      "object": "people",
+      "id": "b1e26fa6-c757-4c88-abfa-4b11f5cf3acf",
+      "upstreamConstant": "DYLAN_FIELD_ID"
+    },
+    {
+      "object": "people",
+      "id": "edf6d445-13a7-4373-9a47-8f89e8c0a877",
+      "upstreamConstant": "PATRICK_COLLISON_ID"
+    },
+    {
+      "object": "companies",
+      "id": "06290608-8bf0-4806-99ae-a715a6a93fad",
+      "upstreamConstant": "NOTION_ID"
+    },
+    {
+      "object": "companies",
+      "id": "1f70157c-4ea5-4d81-bc49-e1401abfbb94",
+      "upstreamConstant": "STRIPE_ID"
+    },
+    {
+      "object": "companies",
+      "id": "9d5bcf43-7d38-4e88-82cb-d6d4ce638bf0",
+      "upstreamConstant": "FIGMA_ID"
+    },
+    {
+      "object": "companies",
+      "id": "c776ee49-f608-4a77-8cc8-6fe96ae1e43f",
+      "upstreamConstant": "AIRBNB_ID"
+    },
+    {
+      "object": "companies",
+      "id": "f45ee421-8a3e-4aa5-a1cf-7207cc6754e1",
+      "upstreamConstant": "ANTHROPIC_ID"
+    },
+    {
+      "object": "dashboards",
+      "id": "f31ecf3b-87d3-4e8a-a84b-b6f0f3f8c7e2",
+      "upstreamConstant": "MY_FIRST_DASHBOARD_ID"
+    }
+  ],
+  "before": {
+    "opportunities": 6,
+    "people": 5,
+    "companies": 5,
+    "dashboards": 4,
+    "tasks": 0,
+    "notes": 0
+  },
+  "after": {
+    "opportunities": 0,
+    "people": 0,
+    "companies": 0,
+    "dashboards": 3,
+    "tasks": 0,
+    "notes": 0
+  }
+}
