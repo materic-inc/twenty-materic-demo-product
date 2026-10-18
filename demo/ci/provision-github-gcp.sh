@@ -10,7 +10,7 @@ service_account="github-demo-deploy@$project_id.iam.gserviceaccount.com"
 
 gcloud projects describe "$project_id" --format='value(projectId)' >/dev/null
 project_number="$(gcloud projects describe "$project_id" --format='value(projectNumber)')"
-gcloud services enable iam.googleapis.com iamcredentials.googleapis.com sts.googleapis.com iap.googleapis.com --project="$project_id" --quiet
+gcloud services enable iam.googleapis.com iamcredentials.googleapis.com sts.googleapis.com iap.googleapis.com oslogin.googleapis.com --project="$project_id" --quiet
 if ! gcloud iam workload-identity-pools describe "$pool" --project="$project_id" --location=global >/dev/null 2>&1; then
   gcloud iam workload-identity-pools create "$pool" --project="$project_id" --location=global --display-name='GitHub Twenty demo deployment'
 fi

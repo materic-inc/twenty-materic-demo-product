@@ -26,6 +26,14 @@ sudo /usr/local/sbin/twenty-demo-deploy \
 
 The wrapper validates image/revision agreement, fetches only deployment files from that exact Git commit, stops application writes for backup, waits for server health after strict migrations, starts the worker and proxy, and verifies identical server/worker image digests. The current image and source revision are recorded in `/srv/twenty/current-image` and `/srv/twenty/current-revision`. Failed migrations stop deployment; they are not ignored. Backups remain private under `/srv/twenty/backups` and are included in disk snapshots. Monitor disk usage and copy important recovery points off-host before changing retention.
 
+For the initial deployment only, once Docker is ready on the VM:
+
+```sh
+python3 demo/deploy/bootstrap-gcp.py
+```
+
+This script reads the three scoped secrets from Infisical into a temporary private file, transfers that file over encrypted IAP SSH, installs the root-only environment and deploy wrapper, and starts the pinned official image's server and worker. It does not open public ingress, create the owner, or seed records. The initial hostname is `twenty-stuard-demo-product.materic.inc`.
+
 ## Single-host deployment
 
 Use a Linux host with Docker Compose, at least 4 GB RAM and a DNS hostname pointing to it. Only ports 80 and 443 need public ingress. The database and Redis have no published ports. Caddy obtains and renews HTTPS certificates automatically.

@@ -20,6 +20,7 @@ x-application: &application
     IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS: "true"
     SIGN_IN_PREFILLED: "false"
     TELEMETRY_ENABLED: "false"
+    DPA_DEPLOYMENT_REGION: US
     API_RATE_LIMITING_LONG_LIMIT: ${API_RATE_LIMITING_LONG_LIMIT:-100}
   volumes:
     - uploads:/app/packages/twenty-server/.local-storage
