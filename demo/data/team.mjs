@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { createClient } from './client.mjs';
 import { teamDirectory } from './dataset.mjs';
+import { persistDemoSecrets } from './secrets.mjs';
 
 const { values } = parseArgs({
   options: {
@@ -177,4 +178,12 @@ try {
 }
 console.log(
   `Staff credentials derived from the Infisical seed and saved privately at ${file}; do not commit this file.`,
+);
+const smokeMember = state.members.find((member) => member.completed);
+await persistDemoSecrets({
+  DEMO_SMOKE_EMAIL: smokeMember.email,
+  DEMO_SMOKE_PASSWORD: smokeMember.password,
+});
+console.log(
+  'Persisted DEMO_SMOKE_EMAIL and DEMO_SMOKE_PASSWORD to the scoped Infisical dev path.',
 );

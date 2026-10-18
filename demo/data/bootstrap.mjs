@@ -1,9 +1,9 @@
-import { mkdir, readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
-import { homedir, tmpdir } from 'node:os';
+import { homedir } from 'node:os';
 import { parseArgs } from 'node:util';
-import { spawnSync } from 'node:child_process';
 import { createClient } from './client.mjs';
+import { persistDemoSecrets } from './secrets.mjs';
 
 const { values } = parseArgs({
   options: {
@@ -163,42 +163,11 @@ await writeFile(
   ),
   { mode: 0o600 },
 );
-const temporaryDirectory = await mkdtemp(join(tmpdir(), 'twenty-bootstrap-'));
-try {
-  const environmentPath = join(temporaryDirectory, 'secrets.env');
-  await writeFile(
-    environmentPath,
-    [
-      `TWENTY_API_KEY=${JSON.stringify(generated.generateApiKeyToken.token)}`,
-      `TWENTY_WORKSPACE_ID=${JSON.stringify(workspace.id)}`,
-      'TWENTY_BASE_URL="https://twenty-stuard-demo-product.materic.inc"',
-    ].join('\n') + '\n',
-    { mode: 0o600 },
-  );
-  const stored = spawnSync(
-    'infisical',
-    [
-      'secrets',
-      'set',
-      '--projectId',
-      'c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c',
-      '--env',
-      'dev',
-      '--path',
-      '/twenty-stuard-demo-product',
-      '--file',
-      environmentPath,
-      '--silent',
-    ],
-    { encoding: 'utf8' },
-  );
-  if (stored.status !== 0)
-    throw new Error(
-      `Infisical persistence failed (exit ${stored.status}); recover from the private bootstrap state before continuing`,
-    );
-} finally {
-  await rm(temporaryDirectory, { recursive: true, force: true });
-}
+await persistDemoSecrets({
+  TWENTY_API_KEY: generated.generateApiKeyToken.token,
+  TWENTY_WORKSPACE_ID: workspace.id,
+  TWENTY_BASE_URL: 'https://twenty-stuard-demo-product.materic.inc',
+});
 console.log(
   `Workspace ready: ${workspaceName} (${workspace.id}). Owner: ${email}.`,
 );

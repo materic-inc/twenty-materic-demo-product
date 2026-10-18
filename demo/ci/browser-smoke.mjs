@@ -20,7 +20,9 @@ try {
   page.on('pageerror', (error) => scriptFailures.push(error.message));
   const response = await page.goto(baseUrl.href, { waitUntil: 'networkidle', timeout: 60_000 });
   assert.equal(response.status(), 200);
-  await page.getByRole('button', { name: /continue with email|sign in/i }).first().waitFor({ state: 'visible', timeout: 60_000 });
+  await page.getByRole('button', { name: /continue with email|sign in/i })
+    .or(page.getByPlaceholder('Email', { exact: true }))
+    .first().waitFor({ state: 'visible', timeout: 60_000 });
   if (process.env.DEMO_SMOKE_EMAIL && process.env.DEMO_SMOKE_PASSWORD) {
     if (!(await page.getByPlaceholder('Email', { exact: true }).isVisible())) {
       await page.getByRole('button', { name: /continue with email/i }).first().click();
