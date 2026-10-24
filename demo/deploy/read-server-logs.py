@@ -11,7 +11,7 @@ def main():
         raise ValueError("Unknown demo service")
     exported = subprocess.run(
         ["infisical", "export", "--projectId", "c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c",
-         "--env", "dev", "--path", "/twenty-stuard-demo-product", "--format", "json", "--silent"],
+         "--env", "dev", "--path", "/twenty-materic-demo-product", "--format", "json", "--silent"],
         capture_output=True, text=True, check=True,
     )
     secrets = [item["value"] for item in json.loads(exported.stdout) if len(item.get("value", "")) > 5]

@@ -6,7 +6,7 @@ umask 077
 image="${1:?Pass the immutable GHCR image digest}"
 source_revision="${2:?Pass the matching 40-character Git revision}"
 registry_username="${3:-}"
-[[ "$image" =~ ^ghcr\.io/materic-inc/twenty-stuard-demo-product@sha256:[a-f0-9]{64}$ ]] || { echo "Unexpected image reference." >&2; exit 1; }
+[[ "$image" =~ ^ghcr\.io/materic-inc/twenty-(stuard|materic)-demo-product@sha256:[a-f0-9]{64}$ ]] || { echo "Unexpected image reference." >&2; exit 1; }
 [[ "$source_revision" =~ ^[a-f0-9]{40}$ ]] || { echo "Unexpected source revision." >&2; exit 1; }
 
 exec 9>/run/lock/twenty-demo-deploy.lock
@@ -45,7 +45,7 @@ image_revision="$(docker image inspect "$image" --format '{{ index .Config.Label
 staging_directory="$(mktemp -d)"
 for deploy_file in compose.yaml Caddyfile entrypoint.sh; do
   curl --fail --silent --show-error --location \
-    "https://raw.githubusercontent.com/materic-inc/twenty-stuard-demo-product/$source_revision/demo/deploy/$deploy_file" \
+    "https://raw.githubusercontent.com/materic-inc/twenty-materic-demo-product/$source_revision/demo/deploy/$deploy_file" \
     --output "$staging_directory/$deploy_file"
 done
 

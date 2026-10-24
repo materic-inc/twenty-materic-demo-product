@@ -14,7 +14,7 @@ backup = pathlib.Path('/srv/twenty/backups') / baseline
 expected = [json.loads(line) for line in (backup / 'counts.ndjson').read_text().splitlines() if line.strip()]
 if not expected:
     raise RuntimeError('Baseline has no workspace count manifest')
-database = 'twenty_stuard_demo_restore_' + uuid.uuid4().hex[:16]
+database = 'twenty_materic_demo_restore_' + uuid.uuid4().hex[:16]
 container = 'twenty-stuard-demo-product-postgres-1'
 prefix = ['docker', 'exec', '-i', container]
 def run(arguments, **kwargs):
@@ -49,7 +49,7 @@ def main():
     parser.add_argument("--baseline", required=True)
     parser.add_argument("--output", type=Path, required=True)
     arguments = parser.parse_args()
-    if not re.fullmatch(r"twenty-stuard-demo-baseline-[a-z0-9-]+", arguments.baseline):
+    if not re.fullmatch(r"twenty-(stuard|materic)-demo-baseline-[a-z0-9-]+", arguments.baseline):
         raise ValueError("Unexpected baseline name")
     program = REMOTE_RESTORE.replace("BASELINE_NAME", repr(arguments.baseline))
     result = subprocess.run(

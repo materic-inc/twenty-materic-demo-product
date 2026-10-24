@@ -17,7 +17,7 @@ export DEMO_TEST_INPUT="$temporary_directory/input"
 export GCP_PROJECT_ID=fixture-project GCP_ZONE=us-east1-b GCP_INSTANCE_NAME=fixture-instance
 export DEMO_SOURCE_SHA=0123456789012345678901234567890123456789
 export GHCR_USERNAME=fixture-bot GHCR_TOKEN=fixture-ci-token-not-a-secret
-printf '%s\n' 'ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:0123456789012345678901234567890123456789012345678901234567890123' > "$temporary_directory/demo-image.txt"
+printf '%s\n' 'ghcr.io/materic-inc/twenty-materic-demo-product@sha256:0123456789012345678901234567890123456789012345678901234567890123' > "$temporary_directory/demo-image.txt"
 
 cd "$temporary_directory"
 bash "$repository_directory/demo/ci/gcp-deploy.sh" > output 2>&1
@@ -29,7 +29,7 @@ if grep -q "$GHCR_TOKEN" "$DEMO_TEST_ARGUMENTS" output; then
 fi
 grep -qx -- '--tunnel-through-iap' "$DEMO_TEST_ARGUMENTS"
 grep -qx -- '--ssh-flag=-T' "$DEMO_TEST_ARGUMENTS"
-grep -q '^--command=sudo /usr/local/sbin/twenty-demo-deploy ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:' "$DEMO_TEST_ARGUMENTS"
+grep -q '^--command=sudo /usr/local/sbin/twenty-demo-deploy ghcr.io/materic-inc/twenty-materic-demo-product@sha256:' "$DEMO_TEST_ARGUMENTS"
 
 rm "$DEMO_TEST_ARGUMENTS"
 if GHCR_USERNAME="invalid;username" bash "$repository_directory/demo/ci/gcp-deploy.sh" > output 2>&1; then

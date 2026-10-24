@@ -11,7 +11,7 @@ import urllib.request
 
 PROJECT = "twenty-stuard-demo-product"
 ZONE = "us-east1-b"
-HOST = "twenty-stuard-demo-product.materic.inc"
+HOST = "twenty-materic-demo-product.materic.inc"
 
 REMOTE_INSPECTION = r'''
 import glob, json, os, pathlib, subprocess, tomllib
@@ -92,7 +92,7 @@ def main():
         "allServicesRunning": all(value["running"] for value in services.values()),
         "databaseAndServerHealthy": all(services[name]["health"] == "healthy" for name in ["postgres", "redis", "server"]),
         "serverWorkerSameImage": services["server"]["image"] == services["worker"]["image"] == host["currentImage"],
-        "immutableSourceImage": host["currentImage"].startswith("ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:"),
+        "immutableSourceImage": host["currentImage"].startswith("ghcr.io/materic-inc/twenty-materic-demo-product@sha256:"),
         "imageRevisionMatchesDeployment": host["imageRevision"] == host["currentRevision"],
         "rateLimitRestored": services["server"]["apiRateLimit"] == services["worker"]["apiRateLimit"] == "100",
         "workerSkipsPreflight": services["worker"]["disableDatabaseMigrations"] == services["worker"]["disableCronRegistration"] == "true",

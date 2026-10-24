@@ -2,7 +2,7 @@
 set -euo pipefail
 
 snapshot_name="${1:?Pass a permanent baseline snapshot name after import and QA finish}"
-[[ "$snapshot_name" =~ ^twenty-stuard-demo-baseline-[a-z0-9-]+$ ]] || { echo "Unexpected baseline name." >&2; exit 1; }
+[[ "$snapshot_name" =~ ^twenty-(stuard|materic)-demo-baseline-[a-z0-9-]+$ ]] || { echo "Unexpected baseline name." >&2; exit 1; }
 [[ ${#snapshot_name} -le 63 ]] || { echo "Baseline name is too long." >&2; exit 1; }
 ssh=(gcloud compute ssh twenty-stuard-demo-product --project twenty-stuard-demo-product --zone us-east1-b --tunnel-through-iap --quiet)
 

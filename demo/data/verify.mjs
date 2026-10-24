@@ -246,7 +246,7 @@ const reportPath = resolve(
       homedir(),
       '.local',
       'share',
-      'twenty-stuard-demo-product',
+      'twenty-materic-demo-product',
       `verification-${values.profile}.json`,
     ),
 );

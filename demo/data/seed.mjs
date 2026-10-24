@@ -18,7 +18,7 @@ const { values } = parseArgs({
     apply: { type: 'boolean', default: false },
     'state-dir': {
       type: 'string',
-      default: join(homedir(), '.local', 'share', 'twenty-stuard-demo-product'),
+      default: join(homedir(), '.local', 'share', 'twenty-materic-demo-product'),
     },
     'batch-size': { type: 'string', default: '100' },
     'delay-ms': { type: 'string', default: '700' },

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 project_id=twenty-stuard-demo-product
-repository=materic-inc/twenty-stuard-demo-product
+repository=materic-inc/twenty-materic-demo-product
 repository_id=1424765924
 pool=github-demo
 provider=twenty-fork

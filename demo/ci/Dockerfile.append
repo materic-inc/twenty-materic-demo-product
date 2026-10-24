@@ -1,4 +1,4 @@
 
-FROM twenty AS stuard-demo
+FROM twenty AS materic-demo
 COPY --chown=1000:1000 --chmod=755 demo/deploy/entrypoint.sh /app/entrypoint.sh
-LABEL org.opencontainers.image.title="twenty-stuard-demo-product"
+LABEL org.opencontainers.image.title="twenty-materic-demo-product"

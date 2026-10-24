@@ -10,14 +10,15 @@ import tempfile
 PROJECT_ID = "twenty-stuard-demo-product"
 INSTANCE_NAME = "twenty-stuard-demo-product"
 ZONE = "us-east1-b"
-HOSTNAME = "twenty-stuard-demo-product.materic.inc"
+HOSTNAME = "twenty-materic-demo-product.materic.inc"
+LEGACY_HOSTNAME = "twenty-stuard-demo-product.materic.inc"
 BOOTSTRAP_IMAGE = "twentycrm/twenty:v2.48.0@sha256:43fab4bffacdcd63ff3c9257b7f8985a4424d81e9eb43982b9c16a841d555e52"
 
 
 def main():
     exported = subprocess.run(
         ["infisical", "export", "--projectId", "c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c",
-         "--env", "dev", "--path", "/twenty-stuard-demo-product", "--format", "json", "--silent"],
+         "--env", "dev", "--path", "/twenty-materic-demo-product", "--format", "json", "--silent"],
         capture_output=True, text=True, check=True,
     )
     secret_values = {item["key"]: item["value"] for item in json.loads(exported.stdout)}
@@ -30,6 +31,7 @@ def main():
     environment.update({
         "TWENTY_IMAGE": BOOTSTRAP_IMAGE,
         "TWENTY_HOST": HOSTNAME,
+        "TWENTY_LEGACY_HOST": LEGACY_HOSTNAME,
         "SERVER_URL": "https://" + HOSTNAME,
         "API_RATE_LIMITING_LONG_LIMIT": "500",
     })

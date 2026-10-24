@@ -13,7 +13,7 @@ const { values } = parseArgs({
     'owner-state': { type: 'string' },
     'state-dir': {
       type: 'string',
-      default: join(homedir(), '.local', 'share', 'twenty-stuard-demo-product'),
+      default: join(homedir(), '.local', 'share', 'twenty-materic-demo-product'),
     },
   },
 });

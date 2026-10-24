@@ -4,7 +4,7 @@ The `codex/demo-product` branch is the deployed product. The repository remains 
 
 ## Build and release
 
-`demo-ci.yml` checks the demo scripts and Compose configuration, then builds the actual frontend/backend from the checked-out fork using Twenty's Dockerfile. The small appended target installs the strict migration entrypoint. Successful branch builds publish `ghcr.io/materic-inc/twenty-stuard-demo-product:sha-<commit>`; the `demo-image` artifact contains its immutable digest. PR builds never publish or deploy. The GHCR package stays private under Materic's organization policy.
+`demo-ci.yml` checks the demo scripts and Compose configuration, then builds the actual frontend/backend from the checked-out fork using Twenty's Dockerfile. The small appended target installs the strict migration entrypoint. Successful branch builds publish `ghcr.io/materic-inc/twenty-materic-demo-product:sha-<commit>`; the `demo-image` artifact contains its immutable digest. PR builds never publish or deploy. The GHCR package stays private under Materic's organization policy.
 
 Inherited upstream workflows are disabled in this fork's GitHub Actions settings, preserving their source files for future merges. Enable the two `demo-*` workflows. Upstream's full monorepo CI targets organizational runners, release registries, and integration secrets; this fork instead compiles the complete application image and runs focused deployment checks. It does not claim to run the entire upstream test suite.
 
@@ -31,7 +31,7 @@ An authenticated GCP project administrator can reproduce the identity setup with
 
 The VM's root-owned `twenty-demo-deploy` wrapper receives the exact GHCR digest and source revision. Its deployment must stop the worker during migrations, back up existing data, fail on migration errors, start the server before the worker, and verify both use the same image. The workflow then checks backend health and renders sign-in in Chromium. With smoke credentials, it also signs in and verifies the Companies and People navigation. Browser evidence is saved as an artifact. Failed deployment commands, failed login, and browser exceptions fail the workflow.
 
-The `demo` environment publishes `https://twenty-stuard-demo-product.materic.inc` as its deployment URL. Deployment 7161259930 was backfilled with that URL after direct verification of its running source `d98f3b43239b06dd440adb4d0d3d1800a2b2b54b` and immutable server/worker image. Metadata-only workflow changes need YAML validation rather than a new application image; they must not change the reported running application revision.
+The `demo` environment publishes `https://twenty-materic-demo-product.materic.inc` as its deployment URL. Deployment 7161259930 was backfilled with that URL after direct verification of its running source `d98f3b43239b06dd440adb4d0d3d1800a2b2b54b` and immutable server/worker image. Metadata-only workflow changes need YAML validation rather than a new application image; they must not change the reported running application revision.
 
 Hosted smoke tests do not establish a private source-mutation workspace. See the [isolated source preparation recipe](../deploy/ISOLATION.md), including the current secret-store scoping prerequisite for fresh owner/member fixtures.
 

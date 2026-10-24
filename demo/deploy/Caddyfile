@@ -2,3 +2,7 @@
 	reverse_proxy server:3000
 	encode zstd gzip
 }
+
+{$TWENTY_LEGACY_HOST} {
+	redir https://{$TWENTY_HOST}{uri} permanent
+}

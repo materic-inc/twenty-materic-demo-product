@@ -1,6 +1,6 @@
 # Demo hosting
 
-This is an independent Twenty deployment. It has no Stuard integration. Both application processes use the same immutable image. PostgreSQL, Redis and uploads survive application replacement.
+This is an independent Twenty deployment. It has no Materic integration. Both application processes use the same immutable image. PostgreSQL, Redis and uploads survive application replacement.
 
 ## GCP host
 
@@ -20,7 +20,7 @@ Install the root-owned `twenty-demo-deploy` wrapper at `/usr/local/sbin/twenty-d
 
 ```sh
 sudo /usr/local/sbin/twenty-demo-deploy \
-  ghcr.io/materic-inc/twenty-stuard-demo-product@sha256:IMAGE_DIGEST \
+  ghcr.io/materic-inc/twenty-materic-demo-product@sha256:IMAGE_DIGEST \
   FULL_GIT_COMMIT_SHA \
   GITHUB_ACTOR
 ```
@@ -35,19 +35,19 @@ For the initial deployment only, once Docker is ready on the VM:
 python3 demo/deploy/bootstrap-gcp.py
 ```
 
-This script reads the three scoped secrets from Infisical into a temporary private file, transfers that file over encrypted IAP SSH, installs the root-only environment and deploy wrapper, and starts the pinned official image's server and worker. It does not open public ingress, create the owner, or seed records. The initial hostname is `twenty-stuard-demo-product.materic.inc`.
+This script reads the three scoped secrets from Infisical into a temporary private file, transfers that file over encrypted IAP SSH, installs the root-only environment and deploy wrapper, and starts the pinned official image's server and worker. It does not open public ingress, create the owner, or seed records. The initial hostname is `twenty-materic-demo-product.materic.inc`.
 
 ## Single-host deployment
 
 Use a Linux host with Docker Compose, at least 4 GB RAM and a DNS hostname pointing to it. Only ports 80 and 443 need public ingress. The database and Redis have no published ports. Caddy obtains and renews HTTPS certificates automatically.
 
-Secrets belong to Infisical **Apps**, environment `dev`, path `/twenty-stuard-demo-product` (project `c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c`). `POSTGRES_PASSWORD` must be random hexadecimal so it can be embedded safely in the connection URL. Keep `APP_SECRET` and `ENCRYPTION_KEY` stable across releases. Generate each with `openssl rand -hex 32` and save directly to Infisical without displaying values.
+Secrets belong to Infisical **Apps**, environment `dev`, path `/twenty-materic-demo-product` (project `c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c`). `POSTGRES_PASSWORD` must be random hexadecimal so it can be embedded safely in the connection URL. Keep `APP_SECRET` and `ENCRYPTION_KEY` stable across releases. Generate each with `openssl rand -hex 32` and save directly to Infisical without displaying values.
 
-Set non-secret `TWENTY_HOST` and `SERVER_URL` for the actual hostname. Run from the repository root:
+Set non-secret `TWENTY_HOST` and `SERVER_URL` for the actual hostname, and `TWENTY_LEGACY_HOST` for the former hostname that redirects to it. Run from the repository root:
 
 ```sh
 infisical run --projectId c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c \
-  --env dev --path /twenty-stuard-demo-product -- \
+  --env dev --path /twenty-materic-demo-product -- \
   docker compose -f demo/deploy/compose.yaml up -d --wait --wait-timeout 900
 ```
 
@@ -61,7 +61,7 @@ Before changing application versions, create a database and uploads snapshot:
 
 ```sh
 infisical run --projectId c41f4ae6-3f02-4165-a4a4-3ea9043a6e6c \
-  --env dev --path /twenty-stuard-demo-product -- \
+  --env dev --path /twenty-materic-demo-product -- \
   bash demo/deploy/backup.sh /var/backups/twenty
 ```
 
@@ -69,13 +69,13 @@ Copy backups to separate durable storage and test restoring into an isolated dep
 
 ## Golden baseline
 
-Only after synthetic import and product QA finish, run `bash demo/deploy/golden-baseline.sh twenty-stuard-demo-baseline-YYYYMMDD`. This stops application writes, creates a checked PostgreSQL dump and matching uploads archive, creates a named manual GCP snapshot while writes remain stopped, then restarts the application. The manual snapshot is separate from the rolling seven-day policy and has no scheduled expiration. Record the snapshot name, image digest and Git revision with the seed manifest.
+Only after synthetic import and product QA finish, run `bash demo/deploy/golden-baseline.sh twenty-materic-demo-baseline-YYYYMMDD`. This stops application writes, creates a checked PostgreSQL dump and matching uploads archive, creates a named manual GCP snapshot while writes remain stopped, then restarts the application. The manual snapshot is separate from the rolling seven-day policy and has no scheduled expiration. Record the snapshot name, image digest and Git revision with the seed manifest.
 
 The backup includes company, person and opportunity counts captured with writes stopped. Prove the database archive is restorable without touching the live database:
 
 ```sh
 python3 demo/deploy/verify-baseline-restore.py \
-  --baseline=twenty-stuard-demo-baseline-YYYYMMDD \
+  --baseline=twenty-materic-demo-baseline-YYYYMMDD \
   --output=demo/evidence/baseline-restore-verification.json
 ```
 
@@ -84,7 +84,7 @@ This creates a uniquely named verification database on the same PostgreSQL insta
 For recovery, create a separate disk from that snapshot instead of replacing the live disk:
 
 ```sh
-gcloud compute disks create twenty-stuard-demo-baseline-restore \
+gcloud compute disks create twenty-materic-demo-baseline-restore \
   --source-snapshot=YOUR_BASELINE_SNAPSHOT --zone=us-east1-b \
   --project=twenty-stuard-demo-product
 ```

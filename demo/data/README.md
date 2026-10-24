@@ -1,6 +1,6 @@
 # Meridian Cloud demo workspace
 
-An established fictional B2B software company using Twenty as its CRM. All companies, identities, telephone numbers, domains, sales conversations and financial amounts are synthetic. `.example` domains are reserved and cannot deliver real customer mail. No mailbox, calendar, AI provider, payment account or Stuard connection is created.
+An established fictional B2B software company using Twenty as its CRM. All companies, identities, telephone numbers, domains, sales conversations and financial amounts are synthetic. `.example` domains are reserved and cannot deliver real customer mail. No mailbox, calendar, AI provider, payment account or Materic connection is created.
 
 ## Dataset
 
@@ -23,7 +23,7 @@ The full dataset contains 214,000 persisted records, excluding staff, three dash
 
 ## Run
 
-Requires Node.js 22+ without npm dependencies. Bootstrap also requires the authenticated Infisical CLI. First deploy Twenty. `bootstrap.mjs` creates the owner and workspace through the normal auth APIs, activates the standard application, completes owner profile and email-sync onboarding, and creates an Admin-scoped seed API key. It signs in to the existing owner/workspace when rerun. Disable external email delivery and keep `IS_EMAIL_VERIFICATION_REQUIRED=false` for reserved demo identities. Provision these values in Infisical **dev**, under `/twenty-stuard-demo-product`, and inject them at runtime:
+Requires Node.js 22+ without npm dependencies. Bootstrap also requires the authenticated Infisical CLI. First deploy Twenty. `bootstrap.mjs` creates the owner and workspace through the normal auth APIs, activates the standard application, completes owner profile and email-sync onboarding, and creates an Admin-scoped seed API key. It signs in to the existing owner/workspace when rerun. Disable external email delivery and keep `IS_EMAIL_VERIFICATION_REQUIRED=false` for reserved demo identities. Provision these values in Infisical **dev**, under `/twenty-materic-demo-product`, and inject them at runtime:
 
 - `TWENTY_BASE_URL`: deployed Twenty origin.
 - `TWENTY_OWNER_PASSWORD`: owner password stored in Infisical before bootstrap. Owner email defaults to `alex.morgan@meridian-cloud.example`; `TWENTY_OWNER_EMAIL` can override it.
@@ -47,7 +47,7 @@ node demo/data/bootstrap.mjs
 With the complete scoped Infisical environment injected:
 
 ```sh
-node demo/data/team.mjs --owner-state ~/.local/share/twenty-stuard-demo-product/bootstrap-private/bootstrap-secrets.json
+node demo/data/team.mjs --owner-state ~/.local/share/twenty-materic-demo-product/bootstrap-private/bootstrap-secrets.json
 node demo/data/configure.mjs
 node demo/data/cleanup-upstream-samples.mjs --apply --report demo/evidence/upstream-sample-cleanup.json
 node demo/data/seed.mjs --profile smoke --apply
@@ -60,7 +60,7 @@ node demo/data/verify.mjs --profile full --report demo/evidence/data-verificatio
 
 Invitation administration requires a user-bound owner session in Twenty v2.48, supplied with `--owner-state`. If that ephemeral session expires, rerun bootstrap with the same private state directory, then rerun team provisioning; recorded invitation state and completed accounts are recovered. Team provisioning verifies the smoke account's non-admin Member role before storing `DEMO_SMOKE_EMAIL` and `DEMO_SMOKE_PASSWORD` in the scoped Infisical dev path. `audit-team.mjs --owner-state /private/bootstrap-secrets.json` independently verifies all 80 staff have Member access and only the owner is Admin.
 
-The default private state directory is `~/.local/share/twenty-stuard-demo-product`, created with owner-only permissions. Keep it outside Git. Use `--state-dir /absolute/private/path` to choose another destination. Staff passwords remain reproducible from the Infisical seed; retain the original seed rather than rotating it casually.
+The default private state directory is `~/.local/share/twenty-materic-demo-product`, created with owner-only permissions. Keep it outside Git. Use `--state-dir /absolute/private/path` to choose another destination. Staff passwords remain reproducible from the Infisical seed; retain the original seed rather than rotating it casually.
 
 For private imports before opening ingress, keep `TWENTY_BASE_URL` set to the canonical public origin and set `TWENTY_TRANSPORT_URL=http://127.0.0.1:13007` for the IAP tunnel. Requests use the tunnel while checkpoints, credentials and authentication remain pinned to the canonical product. Remove the transport override for subsequent public verification.
 

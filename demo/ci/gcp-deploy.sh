@@ -8,7 +8,7 @@ set -euo pipefail
 : "${GHCR_TOKEN:?Missing ephemeral GHCR_TOKEN}"
 : "${GHCR_USERNAME:?Missing GHCR_USERNAME}"
 image=$(cat demo-image.txt)
-if [[ ! "$image" =~ ^ghcr\.io/materic-inc/twenty-stuard-demo-product@sha256:[a-f0-9]{64}$ ]]; then
+if [[ ! "$image" =~ ^ghcr\.io/materic-inc/twenty-(stuard|materic)-demo-product@sha256:[a-f0-9]{64}$ ]]; then
   echo 'Image must be the fork image pinned by sha256 digest.' >&2
   exit 1
 fi

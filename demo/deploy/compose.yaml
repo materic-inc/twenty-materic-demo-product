@@ -93,6 +93,7 @@ services:
     restart: unless-stopped
     environment:
       TWENTY_HOST: ${TWENTY_HOST:?Set the DNS hostname}
+      TWENTY_LEGACY_HOST: ${TWENTY_LEGACY_HOST:?Set the former hostname that redirects to TWENTY_HOST}
     ports:
       - "80:80"
       - "443:443"

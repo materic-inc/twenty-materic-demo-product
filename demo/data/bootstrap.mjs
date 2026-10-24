@@ -9,7 +9,7 @@ const { values } = parseArgs({
   options: {
     'state-dir': {
       type: 'string',
-      default: join(homedir(), '.local', 'share', 'twenty-stuard-demo-product'),
+      default: join(homedir(), '.local', 'share', 'twenty-materic-demo-product'),
     },
   },
 });
@@ -181,11 +181,11 @@ await writeFile(
 await persistDemoSecrets({
   TWENTY_API_KEY: generated.generateApiKeyToken.token,
   TWENTY_WORKSPACE_ID: workspace.id,
-  TWENTY_BASE_URL: 'https://twenty-stuard-demo-product.materic.inc',
+  TWENTY_BASE_URL: 'https://twenty-materic-demo-product.materic.inc',
 });
 console.log(
   `Workspace ready: ${workspaceName} (${workspace.id}). Owner: ${email}.`,
 );
 console.log(
-  `API credential saved privately at ${secretsPath}. Persisted TWENTY_API_KEY, TWENTY_WORKSPACE_ID and canonical TWENTY_BASE_URL to Infisical Apps dev /twenty-stuard-demo-product.`,
+  `API credential saved privately at ${secretsPath}. Persisted TWENTY_API_KEY, TWENTY_WORKSPACE_ID and canonical TWENTY_BASE_URL to Infisical Apps dev /twenty-materic-demo-product.`,
 );

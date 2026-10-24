@@ -35,7 +35,7 @@ jobs:
           git diff --check
       - name: Validate portable deployment
         env:
-          TWENTY_IMAGE: ghcr.io/materic-inc/twenty-stuard-demo-product:validation
+          TWENTY_IMAGE: ghcr.io/materic-inc/twenty-materic-demo-product:validation
           APP_SECRET: validation-only-never-deployed
           POSTGRES_PASSWORD: validation-only-never-deployed
           ENCRYPTION_KEY: validation-only-never-deployed
@@ -78,7 +78,7 @@ jobs:
         with:
           context: .
           file: demo/ci/Dockerfile.generated
-          target: stuard-demo
+          target: materic-demo
           platforms: linux/amd64
           push: ${{ github.ref == 'refs/heads/codex/demo-product' && github.event_name != 'pull_request' }}
           tags: ${{ steps.reference.outputs.image }}:sha-${{ github.sha }}
@@ -111,7 +111,7 @@ jobs:
     timeout-minutes: 50
     environment:
       name: demo
-      url: https://twenty-stuard-demo-product.materic.inc
+      url: https://twenty-materic-demo-product.materic.inc
     permissions:
       contents: read
       id-token: write

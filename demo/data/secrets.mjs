@@ -24,7 +24,7 @@ export async function persistDemoSecrets(secrets) {
         '--env',
         'dev',
         '--path',
-        '/twenty-stuard-demo-product',
+        '/twenty-materic-demo-product',
         '--file',
         environmentPath,
         '--silent',

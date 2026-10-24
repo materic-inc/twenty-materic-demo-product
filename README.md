@@ -1,4 +1,4 @@
-> Materic's `twenty-stuard-demo-product` fork: [demo deployment, data and delivery guide](demo/README.md).
+> Materic's `twenty-materic-demo-product` fork: [demo deployment, data and delivery guide](demo/README.md).
 
 <p align="center">
   <a href="https://www.twenty.com">
